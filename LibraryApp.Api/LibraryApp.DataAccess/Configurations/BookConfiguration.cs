@@ -20,16 +20,18 @@ public class BookConfiguration : IEntityTypeConfiguration<BookEntity>
         builder.Property(b => b.Title).HasMaxLength(256).IsRequired();
         builder.Property(b => b.Genre).HasMaxLength(256).IsRequired();
         builder.Property(b => b.Description).HasMaxLength(256).IsRequired();
-        builder.Property(b => b.Author).IsRequired();
         builder.Property(b => b.AuthorId).IsRequired();
 
         builder
             .HasOne(b => b.Author)
-            .WithMany(a => a.Books);
+            .WithMany(a => a.Books)
+            .HasForeignKey(b => b.AuthorId)
+            .IsRequired();
 
         builder
             .HasOne(b => b.User)
-            .WithMany(u => u.Books);
+            .WithMany(u => u.Books)
+            .HasForeignKey(b => b.UserId);
 
     }
 }
