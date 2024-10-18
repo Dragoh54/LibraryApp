@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryApp.Application.Repositories;
+namespace LibraryApp.DomainModel.Enums;
 
-public interface IUserRepository
+public enum Role
 {
+    Guest,
+    User,
+    Admin
 }

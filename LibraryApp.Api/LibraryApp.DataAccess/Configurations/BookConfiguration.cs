@@ -1,0 +1,35 @@
+﻿using LibraryApp.Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LibraryApp.DataAccess.Configurations;
+
+public class BookConfiguration : IEntityTypeConfiguration<BookEntity>
+{
+    public void Configure(EntityTypeBuilder<BookEntity> builder)
+    {
+        builder.HasKey(b => b.Id);
+
+        builder.Property(b => b.Id).IsRequired();
+        builder.Property(b => b.ISBN).HasMaxLength(256).IsRequired();
+        builder.Property(b => b.Title).HasMaxLength(256).IsRequired();
+        builder.Property(b => b.Genre).HasMaxLength(256).IsRequired();
+        builder.Property(b => b.Description).HasMaxLength(256).IsRequired();
+        builder.Property(b => b.Author).IsRequired();
+        builder.Property(b => b.AuthorId).IsRequired();
+
+        builder
+            .HasOne(b => b.Author)
+            .WithMany(a => a.Books);
+
+        builder
+            .HasOne(b => b.User)
+            .WithMany(u => u.Books);
+
+    }
+}

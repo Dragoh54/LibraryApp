@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApp.Api", "LibraryAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApp.DomainModel", "LibraryApp.DomainModel\LibraryApp.DomainModel.csproj", "{7F8309FC-82B7-406D-AFF0-CBBA2627FBCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryApp.DataAccess", "LibraryApp.DataAccess\LibraryApp.DataAccess.csproj", "{CBCFD2AA-5DD3-4080-9A7A-4DD38F2F852F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApp.DataAccess", "LibraryApp.DataAccess\LibraryApp.DataAccess.csproj", "{CBCFD2AA-5DD3-4080-9A7A-4DD38F2F852F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApp.Application", "LibraryApp.Application\LibraryApp.Application.csproj", "{0A844FE6-8BF8-4862-8DCF-3695BCA1FCE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{CBCFD2AA-5DD3-4080-9A7A-4DD38F2F852F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBCFD2AA-5DD3-4080-9A7A-4DD38F2F852F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBCFD2AA-5DD3-4080-9A7A-4DD38F2F852F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A844FE6-8BF8-4862-8DCF-3695BCA1FCE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A844FE6-8BF8-4862-8DCF-3695BCA1FCE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A844FE6-8BF8-4862-8DCF-3695BCA1FCE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A844FE6-8BF8-4862-8DCF-3695BCA1FCE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
