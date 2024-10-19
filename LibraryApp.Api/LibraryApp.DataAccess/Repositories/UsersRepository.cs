@@ -27,7 +27,7 @@ public class UsersRepository : IRepository<UserEntity>
         return result.Entity;
     }
 
-    public async Task<UserEntity>? Update(UserEntity item)
+    public async Task<UserEntity?> Update(UserEntity item)
     {
         var result = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == item.Id);
@@ -62,19 +62,22 @@ public class UsersRepository : IRepository<UserEntity>
             .ToListAsync();
     }
 
-    public Task<UserEntity> Get(Guid id)
+    public async Task<UserEntity?> Get(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+    public async Task SaveAsync()
+    {
+        await _dbContext.SaveChangesAsync();
     }
 
 
-    public Task Save()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
+    //public void Dispose()
+    //{
+    //    Dispose(true);
+    //    GC.SuppressFinalize(this);
+    //}
 }
