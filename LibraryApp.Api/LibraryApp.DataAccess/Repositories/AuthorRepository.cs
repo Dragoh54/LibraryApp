@@ -1,6 +1,7 @@
 ﻿using LibraryApp.Application.Repositories;
 using LibraryApp.DomainModel;
 using LibraryApp.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.DataAccess.Repositories;
 
-public class AuthorRepository : IRepository<AuthorEntity>
+public class AuthorRepository : IAuthorRepository
 {
     private readonly LibraryAppDbContext _dbContext;
 
@@ -18,38 +19,73 @@ public class AuthorRepository : IRepository<AuthorEntity>
         _dbContext = dbContext;
     }
 
-    public Task<AuthorEntity> Create(AuthorEntity item)
+    public async Task<AuthorEntity> Create(AuthorEntity item)
     {
-        throw new NotImplementedException();
+        var result = await _dbContext.Authors.AddAsync(item);
+        await _dbContext.SaveChangesAsync();
+
+        return result.Entity;
     }
 
-    public Task Delete(AuthorEntity item)
+    public async Task Delete(AuthorEntity item)
     {
-        throw new NotImplementedException();
+        await _dbContext.Authors
+            .Where(a => a.Id == item.Id)
+            .ExecuteDeleteAsync();
     }
 
-    public void Dispose()
+    public async Task<AuthorEntity?> Get(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Authors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public Task<AuthorEntity?> Get(Guid id)
+    public async Task<IEnumerable<AuthorEntity>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _dbContext.Authors
+            .AsNoTracking()
+            .ToListAsync();
     }
 
-    public Task<IEnumerable<AuthorEntity>> GetAll()
+    public async Task SaveAsync()
     {
-        throw new NotImplementedException();
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task SaveAsync()
+    public async Task<AuthorEntity?> Update(AuthorEntity item)
     {
-        throw new NotImplementedException();
+        var result = await _dbContext.Authors
+            .FirstOrDefaultAsync(a => a.Id == item.Id);
+
+        if(result is null)
+        {
+            return null;
+        }
+
+        result.Id = item.Id;
+        result.Surname = item.Surname;
+        result.Country = item.Country;
+        result.BirthDate = item.BirthDate;
+        result.Books = item.Books;
+
+        await _dbContext.SaveChangesAsync();
+
+        return result;
     }
 
-    public Task<AuthorEntity?> Update(AuthorEntity item)
+    public async Task<IEnumerable<BookEntity>?> GetAuthorBooks(AuthorEntity item)
     {
-        throw new NotImplementedException();
+        var result = await _dbContext.Authors
+            .Include(a => a.Books) 
+            .AsNoTracking()        
+            .FirstOrDefaultAsync(a => a.Id == item.Id);
+
+        if (result is null)
+        {
+            return null;
+        }
+
+        return result.Books;
     }
 }

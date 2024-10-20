@@ -73,11 +73,4 @@ public class UsersRepository : IRepository<UserEntity>
     {
         await _dbContext.SaveChangesAsync();
     }
-
-
-    //public void Dispose()
-    //{
-    //    Dispose(true);
-    //    GC.SuppressFinalize(this);
-    //}
 }
