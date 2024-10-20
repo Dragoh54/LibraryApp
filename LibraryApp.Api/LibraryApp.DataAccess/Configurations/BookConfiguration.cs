@@ -22,6 +22,11 @@ public class BookConfiguration : IEntityTypeConfiguration<BookEntity>
         builder.Property(b => b.Description).HasMaxLength(256).IsRequired();
         builder.Property(b => b.AuthorId).IsRequired();
 
+        builder.Property(b => b.TakenAt)
+            .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+        builder.Property(b => b.TakenAt)
+        .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
         builder
             .HasOne(b => b.Author)
             .WithMany(a => a.Books)

@@ -75,8 +75,8 @@ public class BookRepository : IBookRepository
         result.Title = item.Title;
         result.Genre = item.Genre;
         result.Description = item.Description;
-        result.Taken = item.Taken;
-        result.Expire = item.Expire;
+        result.TakenAt = item.TakenAt;
+        result.ReturnBy = item.ReturnBy;
         result.Author = item.Author;
         result.AuthorId = item.AuthorId;
         result.User = item.User;

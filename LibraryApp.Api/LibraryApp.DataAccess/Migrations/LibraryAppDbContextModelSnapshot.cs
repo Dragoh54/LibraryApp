@@ -60,9 +60,6 @@ namespace LibraryApp.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime?>("Expire")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Genre")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -73,7 +70,10 @@ namespace LibraryApp.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime?>("Taken")
+                    b.Property<DateTime>("ReturnBy")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("TakenAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")

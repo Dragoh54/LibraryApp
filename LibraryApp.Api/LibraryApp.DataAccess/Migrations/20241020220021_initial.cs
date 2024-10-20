@@ -49,8 +49,8 @@ namespace LibraryApp.DataAccess.Migrations
                     Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Genre = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Taken = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Expire = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    TakenAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReturnBy = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: true)
                 },

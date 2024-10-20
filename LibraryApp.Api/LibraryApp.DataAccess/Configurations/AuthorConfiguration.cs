@@ -20,6 +20,9 @@ public class AuthorConfiguration : IEntityTypeConfiguration<AuthorEntity>
         builder.Property(a => a.Country).HasMaxLength(256).IsRequired();
         builder.Property(a => a.BirthDate).IsRequired();
 
+        builder.Property(a => a.BirthDate)
+            .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
         builder
             .HasMany(a => a.Books)
             .WithOne(b => b.Author)

@@ -1,15 +1,15 @@
+using LibraryApp.Api;
+using LibraryApp.DataAccess.DataSeeder;
 using LibraryApp.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
 
-builder.Services.AddDbContext<LibraryAppDbContext>(
-    options =>
-    {
-        options.UseNpgsql(configuration.GetConnectionString(nameof(LibraryAppDbContext)));
-    });
+
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services); 
 
 var app = builder.Build();
+startup.Configure(app, app.Environment); 
 
 app.Run();

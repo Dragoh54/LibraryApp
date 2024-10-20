@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LibraryApp.DataAccess.Migrations
 {
     [DbContext(typeof(LibraryAppDbContext))]
-    [Migration("20241018212728_initial")]
+    [Migration("20241020220021_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -63,9 +63,6 @@ namespace LibraryApp.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime?>("Expire")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Genre")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -76,7 +73,10 @@ namespace LibraryApp.DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime?>("Taken")
+                    b.Property<DateTime>("ReturnBy")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("TakenAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")

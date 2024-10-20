@@ -13,8 +13,8 @@ public class BookEntity
     public string Title { get; set; } = string.Empty;
     public string Genre { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty; 
-    public DateTime? Taken { get; set; }
-    public DateTime? Expire { get; set; }
+    public DateTime TakenAt { get; set; }
+    public DateTime ReturnBy { get; set; }
 
     public AuthorEntity Author { get; set; }
     public Guid AuthorId { get; set; }
@@ -31,8 +31,8 @@ public class BookEntity
         Title = title;
         Genre = genre;
         Description = description;
-        Taken = taken;
-        Expire = expire;
+        TakenAt = taken;
+        ReturnBy = expire;
         Author = author;
         AuthorId = author.Id;
         User = user;
