@@ -14,11 +14,13 @@ public class UserService
 {
     private readonly IPasswordHasher _passwordHasher;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IJwtProvider _jwtProvider;
 
-    public UserService(IPasswordHasher hasher, IUnitOfWork unitOfWork)
+    public UserService(IPasswordHasher hasher, IUnitOfWork unitOfWork, IJwtProvider jwtProvider)
     {
         _passwordHasher = hasher;
         _unitOfWork = unitOfWork;
+        _jwtProvider = jwtProvider;
     }
 
     public async Task Register(string username, string email, string password, Role role = Role.User)
@@ -37,22 +39,24 @@ public class UserService
         await _unitOfWork.UserRepository.Add(user);
     }
 
-    //public async Task<string> Login(string email, string password)
-    //{
-    //    var user = await _unitOfWork.UserRepository.GetByEmail(email);
+    public async Task<string> Login(string email, string password)
+    {
+        var user = await _unitOfWork.UserRepository.GetByEmail(email);
 
-    //    if(user is null)
-    //    {
-    //        throw new Exception("Cannot found user with this email");
-    //    }
+        if (user is null)
+        {
+            throw new Exception("Cannot found user with this email");
+        }
 
-    //    var result = _passwordHasher.Verify(password, user.PasswordHash);
+        var result = _passwordHasher.Verify(password, user.PasswordHash);
 
-    //    if (!result)
-    //    {
-    //        throw new Exception("Failed to login");
-    //    }
+        if (!result)
+        {
+            throw new Exception("Failed to login");
+        }
 
+        var token = _jwtProvider.GenerateToken(user);
 
-    //}
+        return token;
+    }
 }

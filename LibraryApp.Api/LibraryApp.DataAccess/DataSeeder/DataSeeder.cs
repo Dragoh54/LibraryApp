@@ -1,4 +1,5 @@
-﻿using LibraryApp.DomainModel;
+﻿using LibraryApp.DataAccess.Utilities;
+using LibraryApp.DomainModel;
 using LibraryApp.DomainModel.Enums;
 using LibraryApp.Entities.Models;
 using System;
@@ -12,6 +13,7 @@ namespace LibraryApp.DataAccess.DataSeeder;
 public class DataSeeder
 {
     public readonly LibraryAppDbContext _dbContext;
+    private readonly PasswordHasher passwordHasher = new PasswordHasher();
 
     public DataSeeder(LibraryAppDbContext dbContext)
     {
@@ -66,7 +68,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "booklover123",
                 Email = "booklover123@example.com",
-                PasswordHash = "hashedpassword1",
+                PasswordHash = passwordHasher.Generate("hashedpassword1"),
                 Role = Role.User
             },
             new UserEntity
@@ -74,7 +76,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "adminuser",
                 Email = "admin@example.com",
-                PasswordHash = "hashedpassword2",
+                PasswordHash = passwordHasher.Generate("hashedpassword2"),
                 Role = Role.Admin
             },
             new UserEntity
@@ -82,7 +84,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "literaturefan",
                 Email = "fan@example.com",
-                PasswordHash = "hashedpassword3",
+                PasswordHash = passwordHasher.Generate("hashedpassword3"),
                 Role = Role.User
             },
             new UserEntity
@@ -90,7 +92,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "historybuff",
                 Email = "historybuff@example.com",
-                PasswordHash = "hashedpassword4",
+                PasswordHash = passwordHasher.Generate("hashedpassword4"),
                 Role = Role.User
             },
             new UserEntity
@@ -98,7 +100,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "sciencegeek",
                 Email = "sciencegeek@example.com",
-                PasswordHash = "hashedpassword5",
+                PasswordHash = passwordHasher.Generate("hashedpassword5"),
                 Role = Role.User
             }
         };
