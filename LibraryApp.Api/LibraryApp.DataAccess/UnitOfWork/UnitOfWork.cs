@@ -1,5 +1,5 @@
-﻿using LibraryApp.Application.Repositories;
-using LibraryApp.Application.UnitOfWork;
+﻿using LibraryApp.Application.Interfaces.Repositories;
+using LibraryApp.Application.Interfaces.UnitOfWork;
 using LibraryApp.DomainModel;
 using LibraryApp.Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +14,17 @@ namespace LibraryApp.DataAccess.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly LibraryAppDbContext _dbContext;
-    private readonly IRepository<UserEntity> _userRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IBookRepository _bookRepository;
 
     private bool disposed = false;
 
-    public IRepository<UserEntity> UserRepository => _userRepository;
+    public IUserRepository UserRepository => _userRepository;
     public IAuthorRepository AuthorRepository => _authorRepository;
     public IBookRepository BookRepository => _bookRepository;
 
-    public UnitOfWork(LibraryAppDbContext dbContext, IRepository<UserEntity> userRepository, IAuthorRepository authorRepository, IBookRepository bookRepository)
+    public UnitOfWork(LibraryAppDbContext dbContext, IUserRepository userRepository, IAuthorRepository authorRepository, IBookRepository bookRepository)
     {
         _dbContext = dbContext;
         _userRepository = userRepository;

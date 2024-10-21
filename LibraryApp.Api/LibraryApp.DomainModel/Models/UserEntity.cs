@@ -28,4 +28,13 @@ public class UserEntity
         Role = role;
         Books = books;
     }
+
+    public UserEntity(Guid id, string nickname, string email, string passwordHash, Role role)
+    {
+        Id = id;
+        Nickname = nickname;
+        Email = email;
+        PasswordHash = passwordHash;
+        Role = role;
+    }
 }

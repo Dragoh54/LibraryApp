@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Repositories;
+﻿using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.DomainModel;
 using LibraryApp.Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.DataAccess.Repositories;
 
-public class UsersRepository : IRepository<UserEntity>
+public class UsersRepository : IUserRepository
 {
     private readonly LibraryAppDbContext _dbContext;
 
@@ -19,7 +19,7 @@ public class UsersRepository : IRepository<UserEntity>
         _dbContext = dbContext;
     }
 
-    public async Task<UserEntity> Create(UserEntity item)
+    public async Task<UserEntity> Add(UserEntity item)
     {
         var result = await _dbContext.Users.AddAsync(item);
         await _dbContext.SaveChangesAsync();
@@ -67,6 +67,13 @@ public class UsersRepository : IRepository<UserEntity>
         return await _dbContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+    public async Task<UserEntity?> GetByEmail(string email)
+    {
+        return await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task SaveAsync()

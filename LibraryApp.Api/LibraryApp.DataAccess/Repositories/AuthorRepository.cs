@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Repositories;
+﻿using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.DomainModel;
 using LibraryApp.Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ public class AuthorRepository : IAuthorRepository
         _dbContext = dbContext;
     }
 
-    public async Task<AuthorEntity> Create(AuthorEntity item)
+    public async Task<AuthorEntity> Add(AuthorEntity item)
     {
         var result = await _dbContext.Authors.AddAsync(item);
         await _dbContext.SaveChangesAsync();

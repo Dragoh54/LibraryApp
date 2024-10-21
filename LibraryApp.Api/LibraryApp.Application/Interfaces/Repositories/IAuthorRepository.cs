@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryApp.Application.Repositories;
+namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IAuthorRepository : IRepository<AuthorEntity>
 {

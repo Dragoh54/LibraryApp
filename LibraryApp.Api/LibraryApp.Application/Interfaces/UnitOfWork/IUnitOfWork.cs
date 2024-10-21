@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Repositories;
+﻿using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryApp.Application.UnitOfWork;
+namespace LibraryApp.Application.Interfaces.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    IRepository<UserEntity> UserRepository { get; }
+    IUserRepository UserRepository { get; }
     IAuthorRepository AuthorRepository { get; }
     IBookRepository BookRepository { get; }
 }
