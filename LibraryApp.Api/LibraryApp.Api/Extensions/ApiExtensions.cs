@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using LibraryApp.Api.Requirements;
+using LibraryApp.DomainModel.Enums;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -34,6 +37,16 @@ public static class ApiExtensions
                 };
             });
 
-        services.AddAuthorization();
+        services.AddScoped<IAuthorizationHandler, RolePermissionAuthorizationHandler>();
+
+        services.AddAuthorization(options =>
+        {
+            string admin = Role.Admin.ToString();
+
+            options.AddPolicy(admin, policy =>
+            {
+                policy.AddRequirements(new RolePermissionRequirement(admin));
+            });
+        });
     }
 }

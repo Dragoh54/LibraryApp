@@ -8,7 +8,6 @@ namespace LibraryApp.DomainModel.Enums;
 
 public enum Role
 {
-    Guest,
     User,
     Admin
 }

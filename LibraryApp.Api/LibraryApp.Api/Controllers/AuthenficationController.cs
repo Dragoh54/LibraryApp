@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using LibraryApp.Application.Services;
 using LibraryApp.Application.User;
+using LibraryApp.DomainModel.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -19,11 +20,11 @@ public class AuthenficationController : Controller
     }
 
     [HttpPost("/login")]
-    public async Task<IResult> Login(LoginUserRequest request, HttpContext context)
+    public async Task<IResult> Login(LoginUserRequest request)
     {
         var token = await _userService.Login(request.Email, request.Password);
 
-        context.Response.Cookies.Append("tasty-cookies", token);
+        HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
         return Results.Ok();
     }
@@ -36,20 +37,20 @@ public class AuthenficationController : Controller
     }
 
     [HttpGet("/logout")]
-    public IActionResult Logout()
+    public async Task<IResult> Logout()
     {
         throw new NotImplementedException();
     }
 
     [HttpGet("/getRole")]
-    [Authorize]
-    public IActionResult GetRole()
+    [Authorize(Policy = "Admin")]
+    public async Task<IResult> GetRole()
     {
-        throw new NotImplementedException();
+        return Results.Ok("Ok");
     }
 
     [HttpPost("/refresh")]
-    public async Task<IActionResult> Refresh()
+    public async Task<IResult> Refresh()
     {
         throw new NotImplementedException();
     }

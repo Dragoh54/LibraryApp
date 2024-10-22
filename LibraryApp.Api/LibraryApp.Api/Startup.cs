@@ -9,7 +9,11 @@ using LibraryApp.DataAccess.UnitOfWork;
 using LibraryApp.DataAccess.Utilities;
 using LibraryApp.DomainModel;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Api;
 using Microsoft.Extensions.Configuration;
+using LibraryApp.Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using LibraryApp.Api.Requirements;
 
 namespace LibraryApp.Api;
 
@@ -27,6 +31,8 @@ public class Startup
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
 
         services.AddControllersWithViews();
+
+        services.AddApiAuthenfication(Configuration);
 
         services.AddDbContext<LibraryAppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("LibraryAppDbContext")));
@@ -67,7 +73,7 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+         
         app.UseCookiePolicy(new CookiePolicyOptions
         {
             MinimumSameSitePolicy = SameSiteMode.Strict,
