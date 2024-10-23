@@ -1,4 +1,6 @@
-﻿using LibraryApp.DataAccess.Dto;
+﻿using Azure.Core;
+using LibraryApp.Application.Services;
+using LibraryApp.DataAccess.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +11,20 @@ namespace LibraryApp.Api.Controllers;
 [Authorize]
 public class BookController : Controller
 {
+    private readonly BookService _bookService;
+
+    public BookController(BookService bookService)
+    {
+        _bookService = bookService;
+    }
+
     [HttpGet]
     [Route("/books")]
     public async Task<IResult> GetAllBooks()
     {
-        return Results.Ok();
+        var books = await _bookService.GetAllBooks();
+
+        return Results.Ok(books);
     }
 
     [HttpGet]

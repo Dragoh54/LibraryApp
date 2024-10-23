@@ -45,8 +45,8 @@ public class Startup
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<UserService>();
-        //TODO: ADD BOOK SERVICE
-        //TODO: ADD AUTHOR SERVICE
+        services.AddScoped<BookService>();
+        services.AddScoped<AuthorService>();
 
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
