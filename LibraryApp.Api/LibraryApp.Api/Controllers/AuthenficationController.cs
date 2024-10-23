@@ -36,10 +36,12 @@ public class AuthenficationController : Controller
         return Results.Ok();
     }
 
-    [HttpGet("/logout")]
+    [HttpPost("/logout")]
+    [Authorize]
     public async Task<IResult> Logout()
     {
-        throw new NotImplementedException();
+        HttpContext.Response.Cookies.Delete("tasty-cookies");
+        return Results.Ok();
     }
 
     [HttpGet("/getRole")]
@@ -50,8 +52,9 @@ public class AuthenficationController : Controller
     }
 
     [HttpPost("/refresh")]
+    [Authorize]
     public async Task<IResult> Refresh()
     {
-        throw new NotImplementedException();
+        return Results.Ok();
     }
 }

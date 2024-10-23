@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.Interfaces.Auth;
+﻿using Azure.Core;
+using LibraryApp.Application.Interfaces.Auth;
 using LibraryApp.Application.Interfaces.UnitOfWork;
 using LibraryApp.DomainModel.Enums;
 using LibraryApp.Entities.Models;
