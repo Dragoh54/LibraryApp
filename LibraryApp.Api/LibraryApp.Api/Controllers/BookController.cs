@@ -50,28 +50,36 @@ public class BookController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> AddBook([FromBody] BookDto bookDto)
     {
-        return Results.Ok();
+        var book = await _bookService.AddBook(bookDto);
+        return Results.Ok(book);
     }
 
     [HttpDelete]
-    [Route("/books/delete/{id:int}")]
+    [Route("/books/delete/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteBook(int id)
+    public async Task<IResult> DeleteBook(Guid id)
     {
         return Results.Ok();
     }
 
     [HttpPut]
-    [Route("/books/update/{id:int}")]
+    [Route("/books/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateBook(int id, [FromBody] BookDto bookDto)
+    public async Task<IResult> UpdateBook(Guid id, [FromBody] BookDto bookDto)
     {
         return Results.Ok();
     }
 
     [HttpPost]
-    [Route("/books/issue/{bookId:int}/user/{userId:int}")]
-    public async Task<IResult> IssueBookToUser(int bookId, int userId)
+    [Route("/books/take/{bookId:int}")]
+    public async Task<IResult> TakeBook(Guid bookId)
+    {
+        return Results.Ok();
+    }
+
+    [HttpPost]
+    [Route("/books/taken")]
+    public async Task<IResult> GetUserBooks()
     {
         return Results.Ok();
     }

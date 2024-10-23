@@ -36,21 +36,22 @@ public class AuthorRepository : IAuthorRepository
             .ExecuteDeleteAsync();
     }
 
-    public async Task<AuthorDto?> Get(Guid id)
+    public async Task<AuthorEntity?> Get(Guid id)
     {
-        var author = _dbContext.Authors
+        var author = await _dbContext.Authors
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        return author.Adapt<AuthorDto>();
+        return author;
     }
 
-    public async Task<IEnumerable<AuthorDto>> GetAll()
+    public async Task<IEnumerable<AuthorEntity>> GetAll()
     {
         var authors = await _dbContext.Authors
             .AsNoTracking()
             .ToListAsync();
-        return authors.Adapt<IEnumerable<AuthorDto>>();
+
+        return authors;
     }
 
     public async Task SaveAsync()
@@ -79,7 +80,7 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
 
-    public async Task<IEnumerable<BookDto>?> GetAuthorBooks(Guid id)
+    public async Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id)
     {
         var result = await _dbContext.Authors
         .AsNoTracking()
@@ -91,6 +92,6 @@ public class AuthorRepository : IAuthorRepository
             throw new Exception("Author with this id doesn't exist");
         }
 
-        return result.Books.Adapt<IEnumerable<BookDto>>();
+        return result.Books;
     }
 }

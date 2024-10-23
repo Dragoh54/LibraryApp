@@ -44,17 +44,17 @@ public class AuthorController : Controller
     }
 
     [HttpPut]
-    [Route("/authors/update/{id:int}")]
+    [Route("/authors/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateAuthor(int id, [FromBody] AuthorDto authorDto)
+    public async Task<IResult> UpdateAuthor(Guid id, [FromBody] AuthorDto authorDto)
     {
         return Results.Ok();
     }
 
     [HttpDelete]
-    [Route("/authors/delete/{id:int}")]
+    [Route("/authors/delete/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteAuthor(int id)
+    public async Task<IResult> DeleteAuthor(Guid id)
     {
         return Results.Ok();
     }

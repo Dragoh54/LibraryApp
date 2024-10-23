@@ -1,5 +1,7 @@
 ﻿using LibraryApp.Application.Interfaces.UnitOfWork;
+using LibraryApp.DataAccess.Dto;
 using LibraryApp.Entities.Models;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +14,13 @@ public class BookService(IUnitOfWork unitOfWork)
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<IEnumerable<BookEntity>> GetAllBooks()
+    public async Task<IEnumerable<BookDto>> GetAllBooks()
     {
         var books = await _unitOfWork.BookRepository.GetAll();
-        return books;
+        return books.Adapt<IEnumerable<BookDto>>();
     }
 
-    public async Task<BookEntity> GetBookById(Guid id)
+    public async Task<BookDto> GetBookById(Guid id)
     {
         var book = await _unitOfWork.BookRepository.Get(id);
 
@@ -27,10 +29,10 @@ public class BookService(IUnitOfWork unitOfWork)
             throw new Exception("Book with this id doesn't exist");
         }
 
-        return book;
+        return book.Adapt<BookDto>();
     }
 
-    public async Task<BookEntity> GetBookByIsbn(string isbn)
+    public async Task<BookDto> GetBookByIsbn(string isbn)
     {
         var book = await _unitOfWork.BookRepository.GetByISBN(isbn);
 
@@ -39,6 +41,37 @@ public class BookService(IUnitOfWork unitOfWork)
             throw new Exception("Book with this isbn doesn't exist");
         }
 
-        return book;
+        return book.Adapt<BookDto>();
+    }
+
+    public async Task<BookDto> AddBook(BookDto bookDto)
+    {
+        if (bookDto is null)
+        {
+            throw new Exception("This book is null");
+        }
+
+        var author = await _unitOfWork.AuthorRepository.Get(bookDto.AuthorId);
+        if (author is null)
+        {
+            throw new Exception("This book author doesn't exist.");
+        }
+
+        var book = new BookEntity
+        {
+            Id = bookDto.Id,
+            ISBN = bookDto.ISBN,
+            Title = bookDto.Title,
+            Description = bookDto.Description,
+            Genre = bookDto.Genre,
+            Author = author,
+            AuthorId = author.Id,
+            TakenAt = bookDto.TakenAt ?? DateTime.MinValue, 
+            ReturnBy = bookDto.ReturnBy ?? DateTime.MinValue,
+        };
+
+        await _unitOfWork.BookRepository.Add(book);
+
+        return bookDto;
     }
 }

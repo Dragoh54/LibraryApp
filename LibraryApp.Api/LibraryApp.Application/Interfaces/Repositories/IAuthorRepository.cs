@@ -10,5 +10,5 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IAuthorRepository : IRepository<AuthorEntity>
 {
-    public Task<IEnumerable<BookDto>?> GetAuthorBooks(Guid id);
+    public Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id);
 }

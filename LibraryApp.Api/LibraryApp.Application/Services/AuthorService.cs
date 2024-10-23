@@ -14,10 +14,10 @@ public class AuthorService(IUnitOfWork unitOfWork)
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<IEnumerable<AuthorEntity>> GetAllAuthors()
+    public async Task<IEnumerable<AuthorDto>> GetAllAuthors()
     {
         var authors = await _unitOfWork.AuthorRepository.GetAll();
-        return authors;
+        return authors.Adapt<IEnumerable<AuthorDto>>();
     }
 
     public async Task<AuthorDto> GetAuthorById(Guid id)
@@ -41,6 +41,6 @@ public class AuthorService(IUnitOfWork unitOfWork)
             throw new Exception("Author with this id doesn't exist");
         }
 
-        return books;
+        return books.Adapt<IEnumerable<BookDto>>();
     }
 }
