@@ -17,7 +17,6 @@ public class BookDto
     public DateTime? ReturnBy { get; set; } = null;
 
     public Guid AuthorId { get; set; }
-    //public AuthorDto Author { get; set; }
 
     public BookDto() { }
     public BookDto(Guid id, string iSBN, string title, string description, string genre, DateTime? takenAt, DateTime? returnBy, Guid authorId)
@@ -41,7 +40,6 @@ public class BookDto
         Genre = genre;
         TakenAt = takenAt;
         ReturnBy = returnBy;
-        //Author = author;
     }
 
     public BookDto(Guid id, string iSBN, string title, string description, string genre, AuthorDto author)
@@ -51,7 +49,6 @@ public class BookDto
         Title = title;
         Description = description;
         Genre = genre;
-        //Author = author;
     }
 
 }

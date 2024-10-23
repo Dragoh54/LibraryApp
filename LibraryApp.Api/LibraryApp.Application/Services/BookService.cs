@@ -57,20 +57,19 @@ public class BookService(IUnitOfWork unitOfWork)
             throw new Exception("This book author doesn't exist.");
         }
 
-        var book = new BookEntity
+        var book = new BookDto
         {
             Id = bookDto.Id,
             ISBN = bookDto.ISBN,
             Title = bookDto.Title,
             Description = bookDto.Description,
             Genre = bookDto.Genre,
-            Author = author,
             AuthorId = author.Id,
             TakenAt = bookDto.TakenAt ?? DateTime.MinValue, 
             ReturnBy = bookDto.ReturnBy ?? DateTime.MinValue,
         };
 
-        await _unitOfWork.BookRepository.Add(book);
+        await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
 
         return bookDto;
     }
