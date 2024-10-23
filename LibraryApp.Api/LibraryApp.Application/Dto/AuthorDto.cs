@@ -12,10 +12,10 @@ public class AuthorDto
     public string Surname { get; set; } = string.Empty;
     public string Country {  get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
-    public List<BookEntity> Books { get; set; } = new List<BookEntity>();
+    public List<BookDto> Books { get; set; } = new List<BookDto>();
     
     public AuthorDto() { }
-    public AuthorDto(string surname, string country, DateTime birthDate, List<BookEntity> books)
+    public AuthorDto(string surname, string country, DateTime birthDate, List<BookDto> books)
     {
         Surname = surname;
         Country = country;

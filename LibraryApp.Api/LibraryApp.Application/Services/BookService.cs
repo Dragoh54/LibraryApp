@@ -17,4 +17,28 @@ public class BookService(IUnitOfWork unitOfWork)
         var books = await _unitOfWork.BookRepository.GetAll();
         return books;
     }
+
+    public async Task<BookEntity> GetBookById(Guid id)
+    {
+        var book = await _unitOfWork.BookRepository.Get(id);
+
+        if(book is null)
+        {
+            throw new Exception("Book with this id doesn't exist");
+        }
+
+        return book;
+    }
+
+    public async Task<BookEntity> GetBookByIsbn(string isbn)
+    {
+        var book = await _unitOfWork.BookRepository.GetByISBN(isbn);
+
+        if (book is null)
+        {
+            throw new Exception("Book with this isbn doesn't exist");
+        }
+
+        return book;
+    }
 }

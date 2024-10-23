@@ -1,4 +1,5 @@
-﻿using LibraryApp.Entities.Models;
+﻿using LibraryApp.DataAccess.Dto;
+using LibraryApp.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,5 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IAuthorRepository : IRepository<AuthorEntity>
 {
-    public Task<IEnumerable<BookEntity>?> GetAuthorBooks(AuthorEntity item);
+    public Task<IEnumerable<BookDto>?> GetAuthorBooks(Guid id);
 }

@@ -1,6 +1,8 @@
 ﻿using LibraryApp.Application.Interfaces.Repositories;
+using LibraryApp.DataAccess.Dto;
 using LibraryApp.DomainModel;
 using LibraryApp.Entities.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,18 +36,21 @@ public class AuthorRepository : IAuthorRepository
             .ExecuteDeleteAsync();
     }
 
-    public async Task<AuthorEntity?> Get(Guid id)
+    public async Task<AuthorDto?> Get(Guid id)
     {
-        return await _dbContext.Authors
+        var author = _dbContext.Authors
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
+
+        return author.Adapt<AuthorDto>();
     }
 
-    public async Task<IEnumerable<AuthorEntity>> GetAll()
+    public async Task<IEnumerable<AuthorDto>> GetAll()
     {
-        return await _dbContext.Authors
+        var authors = await _dbContext.Authors
             .AsNoTracking()
             .ToListAsync();
+        return authors.Adapt<IEnumerable<AuthorDto>>();
     }
 
     public async Task SaveAsync()
@@ -74,18 +79,18 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
 
-    public async Task<IEnumerable<BookEntity>?> GetAuthorBooks(AuthorEntity item)
+    public async Task<IEnumerable<BookDto>?> GetAuthorBooks(Guid id)
     {
         var result = await _dbContext.Authors
-            .Include(a => a.Books) 
-            .AsNoTracking()        
-            .FirstOrDefaultAsync(a => a.Id == item.Id);
+        .AsNoTracking()
+        .Include(a => a.Books)
+        .FirstOrDefaultAsync(a => a.Id == id);
 
         if (result is null)
         {
-            return null;
+            throw new Exception("Author with this id doesn't exist");
         }
 
-        return result.Books;
+        return result.Books.Adapt<IEnumerable<BookDto>>();
     }
 }

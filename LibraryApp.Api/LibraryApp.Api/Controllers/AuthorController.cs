@@ -1,4 +1,5 @@
-﻿using LibraryApp.DataAccess.Dto;
+﻿using LibraryApp.Application.Services;
+using LibraryApp.DataAccess.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +10,29 @@ namespace LibraryApp.Api.Controllers;
 [Authorize]
 public class AuthorController : Controller
 {
+    private readonly AuthorService _authorService;
+
+    public AuthorController(AuthorService authorService)
+    {
+        _authorService = authorService;
+    }
+
     [HttpGet]
     [Route("/authors")]
     public async Task<IResult> GetAllAuthors()
     {
-        return Results.Ok();
+        var authors = await _authorService.GetAllAuthors();
+
+        return Results.Ok(authors);
     }
 
     [HttpGet]
-    [Route("/authors/{id:int}")]
-    public async Task<IResult> GetAuthorById(int id)
+    [Route("/authors/{id:Guid}")]
+    public async Task<IResult> GetAuthorById(Guid id)
     {
-        return Results.Ok();
+        var author = await _authorService.GetAuthorById(id);
+
+        return Results.Ok(author);
     }
 
     [HttpPost]
@@ -48,10 +60,11 @@ public class AuthorController : Controller
     }
 
     [HttpGet]
-    [Route("/authors/{id:int}/books")]
-    public async Task<IResult> GetBooksByAuthor(int id)
+    [Route("/authors/{id:Guid}/books")]
+    public async Task<IResult> GetBooksByAuthor(Guid id)
     {
-        return Results.Ok();
+        var books = await _authorService.GetAuthorBooks(id);
+        return Results.Ok(books);
     }
 }
 

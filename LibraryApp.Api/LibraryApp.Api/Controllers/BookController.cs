@@ -28,17 +28,21 @@ public class BookController : Controller
     }
 
     [HttpGet]
-    [Route("/books/{id:int}")]
-    public async Task<IResult> GetBookById(int id)
+    [Route("/books/{id:Guid}")]
+    public async Task<IResult> GetBookById(Guid id)
     {
-        return Results.Ok();
+        var book = await _bookService.GetBookById(id);
+
+        return Results.Ok(book);
     }
 
     [HttpGet]
     [Route("/books/isbn/{isbn}")]
     public async Task<IResult> GetBookByIsbn(string isbn)
     {
-        return Results.Ok();
+        var book = await _bookService.GetBookByIsbn(isbn);
+
+        return Results.Ok(book);
     }
 
     [HttpPost]
