@@ -48,6 +48,8 @@ public class UserService
         {
             throw new Exception("Cannot found user with this email");
         }
+        
+        Console.WriteLine(user.Role.ToString());
 
         var result = _passwordHasher.Verify(password, user.PasswordHash);
 

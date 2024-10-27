@@ -19,10 +19,10 @@ public class BookDto
     public Guid AuthorId { get; set; }
 
     public BookDto() { }
-    public BookDto(Guid id, string iSBN, string title, string description, string genre, DateTime? takenAt, DateTime? returnBy, Guid authorId)
+    public BookDto(Guid id, string isbn, string title, string description, string genre, DateTime? takenAt, DateTime? returnBy, Guid authorId)
     {
         Id = id;
-        ISBN = iSBN;
+        ISBN = isbn;
         Title = title;
         Description = description;
         Genre = genre;
@@ -30,25 +30,4 @@ public class BookDto
         ReturnBy = returnBy;
         AuthorId= authorId;
     }
-
-    public BookDto(string iSBN, string title, string description, string genre, DateTime? takenAt, DateTime? returnBy, AuthorDto author)
-    {
-        Id = Guid.NewGuid();
-        ISBN = iSBN;
-        Title = title;
-        Description = description;
-        Genre = genre;
-        TakenAt = takenAt;
-        ReturnBy = returnBy;
-    }
-
-    public BookDto(Guid id, string iSBN, string title, string description, string genre, AuthorDto author)
-    {
-        Id = id;
-        ISBN = iSBN;
-        Title = title;
-        Description = description;
-        Genre = genre;
-    }
-
 }

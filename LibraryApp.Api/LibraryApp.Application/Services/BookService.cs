@@ -44,33 +44,23 @@ public class BookService(IUnitOfWork unitOfWork)
         return book.Adapt<BookDto>();
     }
 
-    public async Task<BookDto> AddBook(BookDto bookDto)
+    public async Task<CreateBookDto> AddBook(CreateBookDto newBookDto)
     {
-        if (bookDto is null)
+        if (newBookDto is null)
         {
             throw new Exception("This book is null");
         }
 
-        var author = await _unitOfWork.AuthorRepository.Get(bookDto.AuthorId);
+        var author = await _unitOfWork.AuthorRepository.Get(newBookDto.AuthorId);
         if (author is null)
         {
             throw new Exception("This book author doesn't exist.");
         }
 
-        var book = new BookDto
-        {
-            Id = bookDto.Id,
-            ISBN = bookDto.ISBN,
-            Title = bookDto.Title,
-            Description = bookDto.Description,
-            Genre = bookDto.Genre,
-            AuthorId = author.Id,
-            TakenAt = bookDto.TakenAt ?? DateTime.MinValue, 
-            ReturnBy = bookDto.ReturnBy ?? DateTime.MinValue,
-        };
+        var book = newBookDto.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
 
-        return bookDto;
+        return newBookDto;
     }
 }

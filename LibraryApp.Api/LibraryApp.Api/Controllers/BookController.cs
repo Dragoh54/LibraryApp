@@ -48,7 +48,7 @@ public class BookController : Controller
     [HttpPost]
     [Route("/books/add")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> AddBook([FromBody] BookDto bookDto)
+    public async Task<IResult> AddBook([FromBody] CreateBookDto bookDto)
     {
         var book = await _bookService.AddBook(bookDto);
         return Results.Ok(book);

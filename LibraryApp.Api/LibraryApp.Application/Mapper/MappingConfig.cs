@@ -28,11 +28,24 @@ public class MappingConfig
             .Map(dest => dest.ReturnBy, src => src.ReturnBy)
             .Map(dest => dest.AuthorId, src => src.AuthorId);
 
+        TypeAdapterConfig<CreateBookDto, BookDto>.NewConfig()
+            .Map(dest => dest.Id, src => Guid.NewGuid())
+            .Map(dest => dest.AuthorId, src => src.AuthorId)
+            .Map(dest => dest.Title, src => src.Title)
+            .Map(dest => dest.Description, src => src.Description)
+            .Map(dest => dest.Genre, src => src.Genre);
+
         TypeAdapterConfig<AuthorEntity, AuthorDto>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Surname, src => src.Surname)
             .Map(dest => dest.Country, src => src.Country)
             .Map(dest => dest.BirthDate, src => src.BirthDate)
-            .Map(dest => dest.Books, src => src.Books.Select(book => book.Adapt<BookDto>()).ToList()); ;
+            .Map(dest => dest.Books, src => src.Books.Select(book => book.Adapt<BookDto>()).ToList());
+
+        TypeAdapterConfig<CreateAuthorDto, AuthorDto>.NewConfig()
+            .Map(dest => dest.Id, src => Guid.NewGuid())
+            .Map(dest => dest.Surname, src => src.Surname)
+            .Map(dest => dest.Country, src => src.Country)
+            .Map(dest => dest.BirthDate, src => src.BirthDate);
     }
 }
