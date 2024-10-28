@@ -13,4 +13,5 @@ public interface IUnitOfWork : IDisposable
     IUserRepository UserRepository { get; }
     IAuthorRepository AuthorRepository { get; }
     IBookRepository BookRepository { get; }
+    IRefreshTokenRepository RefreshTokenRepository { get; }
 }

@@ -40,7 +40,7 @@ public class AuthenficationController : Controller
     [Authorize]
     public async Task<IResult> Logout()
     {
-        HttpContext.Response.Cookies.Delete("tasty-cookies");
+        await _userService.Logout(HttpContext);
         return Results.Ok();
     }
 

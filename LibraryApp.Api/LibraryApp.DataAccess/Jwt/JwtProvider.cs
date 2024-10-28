@@ -19,7 +19,7 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
 
     private readonly string _secretKey = configuration["JWTSecretKey"];
 
-    public string GenerateToken(UserEntity user)
+    public string GenerateAccessToken(UserEntity user)
     {
         Claim[] claims = [
             new("Id", user.Id.ToString()),
@@ -35,11 +35,18 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
         var token = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials,
-                expires: DateTime.UtcNow.AddHours(_options.ExpiresHours)
+                expires: DateTime.UtcNow.AddMinutes(_options.ExpiresMinutes)
             );
 
         var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
         return tokenValue;
+    }
+
+    public RefreshToken GenerateRefreshToken(UserEntity user)
+    {
+        var token = new RefreshToken(Guid.NewGuid(), Guid.NewGuid().ToString(), user.Id,
+            DateTime.UtcNow.AddDays(_options.ExpiresDays));
+        return token;
     }
 }

@@ -9,5 +9,6 @@ namespace LibraryApp.DataAccess.Jwt;
 
 public class JwtOptions
 {
-    public int ExpiresHours { get; set; }
+    public int ExpiresMinutes { get; set; }
+    public int ExpiresDays { get; set; }
 }

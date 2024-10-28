@@ -15,12 +15,14 @@ public class LibraryAppDbContext(DbContextOptions<LibraryAppDbContext> options)
     public DbSet<AuthorEntity> Authors { get; set; }
     public DbSet<BookEntity> Books { get; set; }
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<RefreshToken> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new AuthorConfiguration());
         modelBuilder.ApplyConfiguration(new BookConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

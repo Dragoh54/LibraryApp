@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LibraryApp.DataAccess.Migrations
 {
     [DbContext(typeof(LibraryAppDbContext))]
-    [Migration("20241021220952_initial")]
+    [Migration("20241028210717_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -94,6 +94,39 @@ namespace LibraryApp.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryApp.Entities.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("WhenUsed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("LibraryApp.Entities.Models.UserEntity", b =>

@@ -9,5 +9,6 @@ namespace LibraryApp.Application.Interfaces.Auth;
 
 public interface IJwtProvider
 {
-    public string GenerateToken(UserEntity user);
+    public string GenerateAccessToken(UserEntity user);
+    public RefreshToken GenerateRefreshToken(UserEntity user);
 }

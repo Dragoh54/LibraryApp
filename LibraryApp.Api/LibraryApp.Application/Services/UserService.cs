@@ -5,9 +5,11 @@ using LibraryApp.DomainModel.Enums;
 using LibraryApp.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Services;
 
@@ -48,8 +50,6 @@ public class UserService
         {
             throw new Exception("Cannot found user with this email");
         }
-        
-        Console.WriteLine(user.Role.ToString());
 
         var result = _passwordHasher.Verify(password, user.PasswordHash);
 
@@ -58,8 +58,79 @@ public class UserService
             throw new Exception("Failed to login");
         }
 
-        var token = _jwtProvider.GenerateToken(user);
+        var token = _jwtProvider.GenerateAccessToken(user);
+        var refreshToken = _jwtProvider.GenerateRefreshToken(user);
+        
+        if (refreshToken == null)
+        {
+            throw new Exception("Failed to generate refresh token.");
+        }
+        await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
 
         return token;
+    }
+
+    public async Task Logout(HttpContext httpContext)
+    {
+        var token = httpContext.Request.Cookies["tasty-cookies"];
+
+        if (token is null)
+        {
+            throw new Exception("You are not logged in");
+        }
+        
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+
+        var userId = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value;
+
+        if (userId is null)
+        {
+            throw new Exception("This user is not logged in");
+        }
+
+        var refreshToken = _unitOfWork.RefreshTokenRepository.GetByUserId(Guid.Parse(userId)).Result;
+
+        if (refreshToken is null)
+        {
+            throw new Exception("Refresh token not found");
+        }
+
+        refreshToken.IsUsed = true;
+        refreshToken.WhenUsed = DateTime.UtcNow;
+
+        await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.SaveAsync(); 
+
+        _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        httpContext.Response.Cookies.Delete("tasty-cookies");
+    }
+    
+    public async Task<string> Refresh(string refreshToken)
+    {
+        var token = await _unitOfWork.RefreshTokenRepository.GetByToken(refreshToken);
+        
+        if (token is null)
+        {
+            throw new Exception("Invalid refresh token");
+        }
+    
+        if (token.IsUsed)
+        {
+            throw new Exception("This token has already been used");
+        }
+        
+        await _unitOfWork.RefreshTokenRepository.SaveAsync();
+        
+        var user = await _unitOfWork.UserRepository.Get(token.UserId);
+    
+        if (user is null)
+        {
+            throw new Exception("Cannot found user with this token");
+        }
+        
+        var newAccessToken = _jwtProvider.GenerateAccessToken(user);
+    
+        return newAccessToken;
     }
 }

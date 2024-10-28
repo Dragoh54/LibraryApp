@@ -41,6 +41,7 @@ public class Startup
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IUserRepository, UsersRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

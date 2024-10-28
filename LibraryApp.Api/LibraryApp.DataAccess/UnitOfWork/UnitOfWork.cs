@@ -17,19 +17,22 @@ public class UnitOfWork : IUnitOfWork
     private readonly IUserRepository _userRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IBookRepository _bookRepository;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
 
     private bool disposed = false;
 
     public IUserRepository UserRepository => _userRepository;
     public IAuthorRepository AuthorRepository => _authorRepository;
     public IBookRepository BookRepository => _bookRepository;
+    public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository;
 
-    public UnitOfWork(LibraryAppDbContext dbContext, IUserRepository userRepository, IAuthorRepository authorRepository, IBookRepository bookRepository)
+    public UnitOfWork(LibraryAppDbContext dbContext, IUserRepository userRepository, IAuthorRepository authorRepository, IBookRepository bookRepository, IRefreshTokenRepository refreshTokenRepository)
     {
         _dbContext = dbContext;
         _userRepository = userRepository;
         _authorRepository = authorRepository;
         _bookRepository = bookRepository;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
     protected virtual void Dispose(bool disposing)
