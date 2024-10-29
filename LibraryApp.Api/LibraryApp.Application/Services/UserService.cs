@@ -42,7 +42,7 @@ public class UserService
         await _unitOfWork.UserRepository.Add(user);
     }
 
-    public async Task<string> Login(string email, string password)
+    public async Task<(string, string)> Login(string email, string password)
     {
         var user = await _unitOfWork.UserRepository.GetByEmail(email);
 
@@ -67,7 +67,7 @@ public class UserService
         }
         await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
 
-        return token;
+        return (token, refreshToken.Id.ToString());
     }
 
     public async Task Logout(HttpContext httpContext)
@@ -106,31 +106,8 @@ public class UserService
         httpContext.Response.Cookies.Delete("tasty-cookies");
     }
     
-    public async Task<string> Refresh(string refreshToken)
-    {
-        var token = await _unitOfWork.RefreshTokenRepository.GetByToken(refreshToken);
+    //public async Task<string> Refresh(HttpContext httpContext)
+    //{
         
-        if (token is null)
-        {
-            throw new Exception("Invalid refresh token");
-        }
-    
-        if (token.IsUsed)
-        {
-            throw new Exception("This token has already been used");
-        }
-        
-        await _unitOfWork.RefreshTokenRepository.SaveAsync();
-        
-        var user = await _unitOfWork.UserRepository.Get(token.UserId);
-    
-        if (user is null)
-        {
-            throw new Exception("Cannot found user with this token");
-        }
-        
-        var newAccessToken = _jwtProvider.GenerateAccessToken(user);
-    
-        return newAccessToken;
-    }
+    //}
 }

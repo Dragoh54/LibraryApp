@@ -3,7 +3,6 @@
 public class RefreshToken
 {
     public Guid Id { get; set; }
-    public string Token { get; set; }
     public Guid UserId { get; set; }
     public DateTime ExpiryDate { get; set; }
     public bool IsUsed { get; set; } = false;
@@ -11,10 +10,9 @@ public class RefreshToken
 
     public RefreshToken() {}
 
-    public RefreshToken(Guid id, string token, Guid userId, DateTime expiryDate)
+    public RefreshToken(Guid id, Guid userId, DateTime expiryDate)
     {
         Id = id;
-        Token = token;
         UserId = userId;
         ExpiryDate = expiryDate;
 

@@ -30,7 +30,6 @@ namespace LibraryApp.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Token = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsUsed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
@@ -95,12 +94,6 @@ namespace LibraryApp.DataAccess.Migrations
                 name: "IX_Books_UserId",
                 table: "Books",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tokens_Token",
-                table: "Tokens",
-                column: "Token",
-                unique: true);
         }
 
         /// <inheritdoc />

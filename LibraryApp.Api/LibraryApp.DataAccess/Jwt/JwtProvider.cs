@@ -45,7 +45,7 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
 
     public RefreshToken GenerateRefreshToken(UserEntity user)
     {
-        var token = new RefreshToken(Guid.NewGuid(), Guid.NewGuid().ToString(), user.Id,
+        var token = new RefreshToken(Guid.NewGuid(), user.Id,
             DateTime.UtcNow.AddDays(_options.ExpiresDays));
         return token;
     }

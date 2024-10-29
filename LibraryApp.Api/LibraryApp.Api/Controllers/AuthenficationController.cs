@@ -22,9 +22,10 @@ public class AuthenficationController : Controller
     [HttpPost("/login")]
     public async Task<IResult> Login(LoginUserRequest request)
     {
-        var token = await _userService.Login(request.Email, request.Password);
+        var (token, refreshToken )= await _userService.Login(request.Email, request.Password);
 
         HttpContext.Response.Cookies.Append("tasty-cookies", token);
+        HttpContext.Response.Cookies.Append("not-a-refresh-token-cookies", refreshToken);
 
         return Results.Ok();
     }

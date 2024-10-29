@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using LibraryApp.Api.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Api.Requirements;
+using Microsoft.Extensions.Options;
 
 namespace LibraryApp.Api;
 
@@ -29,6 +30,12 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
+
+        services.Configure<CookieOptions>(options =>
+        {
+            options.Secure = true;
+            options.HttpOnly = true;
+        });
 
         services.AddControllersWithViews();
 
@@ -69,6 +76,8 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseSession();
+
         if (env.IsDevelopment())
         {
             app.UseSwagger();
@@ -79,7 +88,8 @@ public class Startup
         {
             MinimumSameSitePolicy = SameSiteMode.Strict,
             HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-            Secure = CookieSecurePolicy.Always
+            Secure = CookieSecurePolicy.Always,
+            
         });
 
         app.UseEndpoints(endpoints =>

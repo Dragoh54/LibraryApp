@@ -45,7 +45,6 @@ public class RefreshTokenRepository : IRefreshTokenRepository
             return null;
         }
 
-        existingToken.Token = item.Token;
         existingToken.UserId = item.UserId;
         existingToken.ExpiryDate = item.ExpiryDate;
         existingToken.WhenUsed = item.WhenUsed;
@@ -64,13 +63,6 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     {
         _dbContext.Tokens.Remove(item);
         await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<RefreshToken?> GetByToken(string token)
-    {
-        return await _dbContext.Tokens
-            .AsNoTracking()
-            .FirstOrDefaultAsync(rt => rt.Token == token);
     }
 
     public async Task<RefreshToken?> GetByUserId(Guid userId)
