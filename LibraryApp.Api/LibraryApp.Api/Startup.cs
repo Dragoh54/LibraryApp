@@ -13,6 +13,7 @@ using LibraryApp.Api;
 using Microsoft.Extensions.Configuration;
 using LibraryApp.Api.Extensions;
 using LibraryApp.Api.Filters;
+using LibraryApp.Api.Middlewares;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Api.Requirements;
 using Microsoft.Extensions.Options;
@@ -72,6 +73,8 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
+        
+        app.UseMiddleware<TokenValidationMiddleware>();
         
         if (env.IsDevelopment())
         {

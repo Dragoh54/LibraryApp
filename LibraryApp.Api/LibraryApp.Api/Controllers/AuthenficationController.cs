@@ -64,6 +64,7 @@ public class AuthenficationController : Controller
     }
 
     [HttpPost("/refresh")]
+    [AllowAnonymous]
     public async Task<IResult> Refresh()
     {
         var token = await _userService.Refresh(HttpContext);

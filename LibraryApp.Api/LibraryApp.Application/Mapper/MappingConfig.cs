@@ -13,12 +13,12 @@ public class MappingConfig
 {
     public static void RegisterMappings()
     {
-        TypeAdapterConfig<UserEntity, UserDto>.NewConfig()
+        TypeAdapterConfig<UserDto, UserEntity>.NewConfig()
             .Map(dest => dest.Nickname, src => src.Nickname)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.Role, src => src.Role);
 
-        TypeAdapterConfig<BookEntity, BookDto>.NewConfig()
+        TypeAdapterConfig<BookDto, BookDto>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.ISBN, src => src.ISBN)
             .Map(dest => dest.Description, src => src.Description)
@@ -35,7 +35,7 @@ public class MappingConfig
             .Map(dest => dest.Description, src => src.Description)
             .Map(dest => dest.Genre, src => src.Genre);
 
-        TypeAdapterConfig<AuthorEntity, AuthorDto>.NewConfig()
+        TypeAdapterConfig<AuthorDto, AuthorEntity>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Surname, src => src.Surname)
             .Map(dest => dest.Country, src => src.Country)
@@ -43,7 +43,6 @@ public class MappingConfig
             .Map(dest => dest.Books, src => src.Books.Select(book => book.Adapt<BookDto>()).ToList());
 
         TypeAdapterConfig<CreateAuthorDto, AuthorDto>.NewConfig()
-            .Map(dest => dest.Id, src => Guid.NewGuid())
             .Map(dest => dest.Surname, src => src.Surname)
             .Map(dest => dest.Country, src => src.Country)
             .Map(dest => dest.BirthDate, src => src.BirthDate);

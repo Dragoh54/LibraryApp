@@ -38,17 +38,19 @@ public class AuthorController : Controller
     [HttpPost]
     [Route("/authors/add")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> AddAuthor([FromBody] AuthorDto authorDto)
+    public async Task<IResult> AddAuthor([FromBody] CreateAuthorDto authorDto)
     {
-        return Results.Ok();
+        var author = await _authorService.AddAuthor(authorDto);
+        return Results.Ok(author);
     }
 
     [HttpPut]
     [Route("/authors/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateAuthor(Guid id, [FromBody] AuthorDto authorDto)
+    public async Task<IResult> UpdateAuthor(Guid id, [FromBody] CreateAuthorDto authorDto)
     {
-        return Results.Ok();
+        var newAuthor = await _authorService.UpdateAuthor(id, authorDto);
+        return Results.Ok(newAuthor);
     }
 
     [HttpDelete]
@@ -56,7 +58,8 @@ public class AuthorController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> DeleteAuthor(Guid id)
     {
-        return Results.Ok();
+        var deletedAuthor = await _authorService.DeleteAuthor(id);
+        return Results.Ok(deletedAuthor);
     }
 
     [HttpGet]
