@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Api;
 using Microsoft.Extensions.Configuration;
 using LibraryApp.Api.Extensions;
+using LibraryApp.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Api.Requirements;
 using Microsoft.Extensions.Options;
@@ -30,12 +31,6 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
-
-        services.Configure<CookieOptions>(options =>
-        {
-            options.Secure = true;
-            options.HttpOnly = true;
-        });
 
         services.AddControllersWithViews();
 
@@ -58,6 +53,8 @@ public class Startup
 
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        
+        services.AddScoped<AllowAnonymousOnlyFilter>();
 
         services.AddEndpointsApiExplorer();
 
@@ -75,9 +72,7 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseSession();
-
+        
         if (env.IsDevelopment())
         {
             app.UseSwagger();

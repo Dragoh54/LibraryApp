@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace LibraryApp.Application.Services;
 
@@ -61,10 +62,11 @@ public class UserService
         var token = _jwtProvider.GenerateAccessToken(user);
         var refreshToken = _jwtProvider.GenerateRefreshToken(user);
         
-        if (refreshToken == null)
+        if (refreshToken is null || token is null)
         {
-            throw new Exception("Failed to generate refresh token.");
+            throw new Exception("Failed to generate tokens.");
         }
+        
         await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
 
         return (token, refreshToken.Id.ToString());
@@ -72,24 +74,14 @@ public class UserService
 
     public async Task Logout(HttpContext httpContext)
     {
-        var token = httpContext.Request.Cookies["tasty-cookies"];
+        var token = httpContext.Request.Cookies["not-a-refresh-token-cookies"];
 
         if (token is null)
         {
-            throw new Exception("You are not logged in");
-        }
-        
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(token);
-
-        var userId = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value;
-
-        if (userId is null)
-        {
-            throw new Exception("This user is not logged in");
+            throw new Exception("Incorrect refresh token cookies");
         }
 
-        var refreshToken = _unitOfWork.RefreshTokenRepository.GetByUserId(Guid.Parse(userId)).Result;
+        var refreshToken = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(token)).Result;
 
         if (refreshToken is null)
         {
@@ -103,11 +95,44 @@ public class UserService
         await _unitOfWork.RefreshTokenRepository.SaveAsync(); 
 
         _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        
         httpContext.Response.Cookies.Delete("tasty-cookies");
+        httpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");
     }
     
-    //public async Task<string> Refresh(HttpContext httpContext)
-    //{
+    public async Task<string> Refresh(HttpContext httpContext)
+    {
+        var refreshToken = httpContext.Request.Cookies["not-a-refresh-token-cookies"];
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            throw new UnauthorizedAccessException("Refresh token is missing.");
+        }
         
-    //}
+        var token = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken)).Result;
+        
+        if (token is null)
+        {
+            throw new UnauthorizedAccessException("This refresh token is missing.");
+        }
+        
+        if (token.ExpiryDate <= DateTime.UtcNow)
+        {
+            throw new UnauthorizedAccessException("Refresh token has expired.");
+        }
+        
+        var user = await _unitOfWork.UserRepository.Get(token.UserId);
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("Invalid refresh token.");
+        }
+
+        var newAccessToken = _jwtProvider.GenerateAccessToken(user);
+        
+        if (newAccessToken is null)
+        {
+            throw new Exception("Failed to refresh token.");
+        }
+        
+        return newAccessToken;
+    }
 }
