@@ -123,34 +123,49 @@ public class BookService(IUnitOfWork unitOfWork)
     }
 
     //TODO: take userId to set it to book
-    // public async Task<BookDto> TakeBook(Guid id, TakeBookRequest bookRequest, HttpContext httpContext)
-    // {
-    //     if (id == Guid.Empty)
-    //     {
-    //         throw new Exception("This book doesn't have an ID");
-    //     }
-    //
-    //     if (bookRequest is null)
-    //     {
-    //         throw new Exception("This book request is null");
-    //     }
-    //
-    //     if (bookRequest.ReturnDate < DateTime.Today)
-    //     {
-    //         throw new Exception("Incorrect return date");
-    //     }
-    //
-    //     var userId = httpContext.Request.Cookies["tasty-cookie"];
-    //
-    //     if (string.IsNullOrEmpty(userId))
-    //     {
-    //         throw new Exception("Unauthorized user");
-    //     }
-    //     
-    //     var book = await _unitOfWork.BookRepository.Get(id);
-    //     book.TakenAt = DateTime.Today;
-    //     book.ReturnBy = bookRequest.ReturnDate;
-    //     book.UserId = 
-    //     
-    // }
+    public async Task<BookDto> TakeBook(Guid id, TakeBookRequest bookRequest, string? userId)
+    {
+        if (id == Guid.Empty)
+        {
+            throw new Exception("This book doesn't have an ID");
+        }
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new Exception("Incorrect user ID");
+        }
+    
+        if (bookRequest is null)
+        {
+            throw new Exception("This book request is null");
+        }
+    
+        if (bookRequest.ReturnDate < DateTime.Today)
+        {
+            throw new Exception("Incorrect return date");
+        }
+        
+        var book = await _unitOfWork.BookRepository.Get(id);
+        var user = await _unitOfWork.UserRepository.Get(Guid.Parse(userId));
+
+        if (book is null)
+        {
+            throw new Exception("Book with this id doesn't exist");
+        }
+
+        if (user is null)
+        {
+            throw new Exception("Incorrect user ID");
+        }
+        
+        book.TakenAt = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc);
+        book.ReturnBy = DateTime.SpecifyKind(bookRequest.ReturnDate, DateTimeKind.Utc);
+        book.UserId = user.Id;
+        book.User = user;
+        
+        await _unitOfWork.BookRepository.Update(book);
+        await _unitOfWork.BookRepository.SaveAsync();
+        
+        return book.Adapt<BookDto>();
+    }
 }

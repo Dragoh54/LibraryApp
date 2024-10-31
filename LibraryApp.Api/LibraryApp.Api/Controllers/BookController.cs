@@ -2,6 +2,7 @@
 using LibraryApp.Application.Book;
 using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
+using LibraryApp.Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,7 +78,11 @@ public class BookController : Controller
     [Route("/books/take/{id:Guid}")]
     public async Task<IResult> TakeBook(Guid id, [FromBody] TakeBookRequest bookRequest)
     {
-        return Results.Ok();
+        var userId = User.FindFirst("Id")?.Value;
+        var book = await _bookService.TakeBook(id, bookRequest, userId);
+        
+        
+        return Results.Ok(book);
     }
 }
 
