@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using LibraryApp.Application.Book;
 using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -59,27 +60,22 @@ public class BookController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> DeleteBook(Guid id)
     {
-        return Results.Ok();
+        var deletedBook = await _bookService.DeleteBook(id);
+        return Results.Ok(deletedBook);
     }
 
     [HttpPut]
     [Route("/books/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateBook(Guid id, [FromBody] BookDto bookDto)
+    public async Task<IResult> UpdateBook(Guid id, [FromBody] CreateBookDto bookDto)
     {
-        return Results.Ok();
+        var updatedBook = await _bookService.UpdateBook(id, bookDto);
+        return Results.Ok(updatedBook);
     }
 
     [HttpPost]
-    [Route("/books/take/{bookId:int}")]
-    public async Task<IResult> TakeBook(Guid bookId)
-    {
-        return Results.Ok();
-    }
-
-    [HttpPost]
-    [Route("/books/taken")]
-    public async Task<IResult> GetUserBooks()
+    [Route("/books/take/{id:Guid}")]
+    public async Task<IResult> TakeBook(Guid id, [FromBody] TakeBookRequest bookRequest)
     {
         return Results.Ok();
     }

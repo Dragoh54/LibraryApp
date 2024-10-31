@@ -95,8 +95,6 @@ public class AuthorService(IUnitOfWork unitOfWork)
         
         await _unitOfWork.AuthorRepository.Update(updatedAuthor.Adapt<AuthorEntity>());
         await _unitOfWork.AuthorRepository.SaveAsync();
-        
-        Console.WriteLine(updatedAuthor.Surname);
 
         return updatedAuthor;
     }
@@ -107,7 +105,7 @@ public class AuthorService(IUnitOfWork unitOfWork)
 
         if (author is null)
         {
-            throw new KeyNotFoundException("Автор с указанным идентификатором не найден.");
+            throw new Exception("Author with this id doesn't exist");
         }
         
         await _unitOfWork.AuthorRepository.Delete(author);

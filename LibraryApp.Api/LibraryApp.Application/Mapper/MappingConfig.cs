@@ -29,7 +29,6 @@ public class MappingConfig
             .Map(dest => dest.AuthorId, src => src.AuthorId);
 
         TypeAdapterConfig<CreateBookDto, BookDto>.NewConfig()
-            .Map(dest => dest.Id, src => Guid.NewGuid())
             .Map(dest => dest.AuthorId, src => src.AuthorId)
             .Map(dest => dest.Title, src => src.Title)
             .Map(dest => dest.Description, src => src.Description)
