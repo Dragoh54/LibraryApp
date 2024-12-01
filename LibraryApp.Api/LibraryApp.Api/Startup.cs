@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.Interfaces.Auth;
+﻿using FluentValidation;
+using LibraryApp.Application.Interfaces.Auth;
 using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.Application.Interfaces.UnitOfWork;
 using LibraryApp.Application.Services;
@@ -13,9 +14,10 @@ using LibraryApp.Api;
 using Microsoft.Extensions.Configuration;
 using LibraryApp.Api.Extensions;
 using LibraryApp.Api.Filters;
-using LibraryApp.Api.Middlewares;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Api.Requirements;
+using LibraryApp.Application.Validators;
+using LibraryApp.DataAccess.Dto;
 using Microsoft.Extensions.Options;
 
 namespace LibraryApp.Api;
@@ -46,6 +48,9 @@ public class Startup
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
+        services.AddScoped<IValidator<CreateBookDto>, CreateBookDtoValidator>();
+        services.AddScoped<IValidator<CreateAuthorDto>, CreateAuthorDtoValidator>();
+        
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<UserService>();
@@ -73,8 +78,6 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
-        
-        app.UseMiddleware<TokenValidationMiddleware>();
         
         if (env.IsDevelopment())
         {

@@ -48,11 +48,6 @@ public class BookService(IUnitOfWork unitOfWork)
 
     public async Task<CreateBookDto> AddBook(CreateBookDto newBookDto)
     {
-        if (newBookDto is null)
-        {
-            throw new Exception("This book is null");
-        }
-
         var author = await _unitOfWork.AuthorRepository.Get(newBookDto.AuthorId);
         if (author is null)
         {
@@ -83,36 +78,6 @@ public class BookService(IUnitOfWork unitOfWork)
 
     public async Task<BookDto> UpdateBook(Guid id, CreateBookDto bookDto)
     {
-        if (bookDto is null)
-        {
-            throw new Exception("This book is null");
-        }
-
-        if (string.IsNullOrWhiteSpace(bookDto.ISBN))
-        {
-            throw new Exception("This book doesn't have an ISBN");
-        }
-
-        if (string.IsNullOrWhiteSpace(bookDto.Title))
-        {
-            throw new Exception("This book doesn't have a title");
-        }
-
-        if (string.IsNullOrWhiteSpace(bookDto.Description))
-        {
-            throw new Exception("This book doesn't have a description");
-        }
-
-        if (string.IsNullOrWhiteSpace(bookDto.Genre))
-        {
-            throw new Exception("This book doesn't have a genre");
-        }
-
-        if (bookDto.AuthorId == Guid.Empty)
-        {
-            throw new Exception("This book doesn't have an author");
-        }
-        
         var updatedBook = bookDto.Adapt<BookDto>();
         updatedBook.Id = id;
 
@@ -121,8 +86,7 @@ public class BookService(IUnitOfWork unitOfWork)
         
         return updatedBook;
     }
-
-    //TODO: take userId to set it to book
+    
     public async Task<BookDto> TakeBook(Guid id, TakeBookRequest bookRequest, string? userId)
     {
         if (id == Guid.Empty)

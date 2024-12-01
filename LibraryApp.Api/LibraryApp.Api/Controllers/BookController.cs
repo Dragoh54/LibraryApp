@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using FluentValidation;
+using FluentValidation.Results;
 using LibraryApp.Application.Book;
 using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
@@ -14,10 +16,12 @@ namespace LibraryApp.Api.Controllers;
 public class BookController : Controller
 {
     private readonly BookService _bookService;
+    private readonly IValidator<CreateBookDto> _validator;
 
-    public BookController(BookService bookService)
+    public BookController(BookService bookService, IValidator<CreateBookDto> validator)
     {
         _bookService = bookService;
+        _validator = validator;
     }
 
     [HttpGet]
@@ -52,6 +56,13 @@ public class BookController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> AddBook([FromBody] CreateBookDto bookDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(bookDto);
+        
+        if (!result.IsValid)
+        {
+            return Results.NoContent();
+        }
+        
         var book = await _bookService.AddBook(bookDto);
         return Results.Ok(book);
     }
@@ -70,6 +81,12 @@ public class BookController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> UpdateBook(Guid id, [FromBody] CreateBookDto bookDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(bookDto);
+        if (!result.IsValid)
+        {
+            return Results.NoContent();
+        }
+        
         var updatedBook = await _bookService.UpdateBook(id, bookDto);
         return Results.Ok(updatedBook);
     }

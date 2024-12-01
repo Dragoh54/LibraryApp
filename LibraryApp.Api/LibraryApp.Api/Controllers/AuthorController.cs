@@ -1,4 +1,6 @@
-﻿using LibraryApp.Application.Services;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,12 @@ namespace LibraryApp.Api.Controllers;
 public class AuthorController : Controller
 {
     private readonly AuthorService _authorService;
+    private readonly IValidator<CreateAuthorDto> _validator;
 
-    public AuthorController(AuthorService authorService)
+    public AuthorController(AuthorService authorService, IValidator<CreateAuthorDto> validator)
     {
         _authorService = authorService;
+        _validator = validator;
     }
 
     [HttpGet]
@@ -40,6 +44,12 @@ public class AuthorController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> AddAuthor([FromBody] CreateAuthorDto authorDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(authorDto);
+        if (!result.IsValid)
+        {
+            return Results.NoContent();
+        }
+
         var author = await _authorService.AddAuthor(authorDto);
         return Results.Ok(author);
     }
@@ -49,6 +59,12 @@ public class AuthorController : Controller
     [Authorize(Policy = "Admin")]
     public async Task<IResult> UpdateAuthor(Guid id, [FromBody] CreateAuthorDto authorDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(authorDto);
+        if (!result.IsValid)
+        {
+            return Results.NoContent();
+        }
+
         var newAuthor = await _authorService.UpdateAuthor(id, authorDto);
         return Results.Ok(newAuthor);
     }

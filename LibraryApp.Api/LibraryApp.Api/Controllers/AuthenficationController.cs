@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using FluentValidation;
 using LibraryApp.Api.Filters;
 using LibraryApp.Application.Services;
 using LibraryApp.Application.User;
