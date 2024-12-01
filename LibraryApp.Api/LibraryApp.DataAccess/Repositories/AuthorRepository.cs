@@ -94,4 +94,28 @@ public class AuthorRepository : IAuthorRepository
 
         return result.Books;
     }
+
+    public async Task<PaginatedPagedResult<AuthorEntity>?> GetAuthors(int page, int pageSize)
+    {
+        if (page <= 0 || pageSize <= 0)
+        {
+            throw new ArgumentException("Page and pageSize must be greater than zero.");
+        }
+
+        var totalCount = await _dbContext.Authors.CountAsync();
+        var items = await _dbContext.Authors
+            .AsNoTracking()
+            .OrderBy(a => a.Surname)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PaginatedPagedResult<AuthorEntity>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+    }
 }

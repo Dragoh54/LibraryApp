@@ -35,7 +35,7 @@ public class BookController : Controller
 
     [HttpGet]
     [Route("/books/{id:Guid}")]
-    public async Task<IResult> GetBookById(Guid id)
+    public async Task<IResult> GetBookById([FromRoute]Guid id)
     {
         var book = await _bookService.GetBookById(id);
 
@@ -44,7 +44,7 @@ public class BookController : Controller
 
     [HttpGet]
     [Route("/books/isbn/{isbn}")]
-    public async Task<IResult> GetBookByIsbn(string isbn)
+    public async Task<IResult> GetBookByIsbn([FromRoute]string isbn)
     {
         var book = await _bookService.GetBookByIsbn(isbn);
 
@@ -70,7 +70,7 @@ public class BookController : Controller
     [HttpDelete]
     [Route("/books/delete/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteBook(Guid id)
+    public async Task<IResult> DeleteBook([FromRoute]Guid id)
     {
         var deletedBook = await _bookService.DeleteBook(id);
         return Results.Ok(deletedBook);
@@ -79,7 +79,7 @@ public class BookController : Controller
     [HttpPut]
     [Route("/books/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateBook(Guid id, [FromBody] CreateBookDto bookDto)
+    public async Task<IResult> UpdateBook([FromRoute]Guid id, [FromBody] CreateBookDto bookDto)
     {
         ValidationResult result = await _validator.ValidateAsync(bookDto);
         if (!result.IsValid)
@@ -93,13 +93,32 @@ public class BookController : Controller
 
     [HttpPost]
     [Route("/books/take/{id:Guid}")]
-    public async Task<IResult> TakeBook(Guid id, [FromBody] TakeBookRequest bookRequest)
+    public async Task<IResult> TakeBook([FromRoute]Guid id, [FromBody] TakeBookRequest bookRequest)
     {
         var userId = User.FindFirst("Id")?.Value;
         var book = await _bookService.TakeBook(id, bookRequest, userId);
         
         
         return Results.Ok(book);
+    }
+    
+    [HttpGet]
+    [Route("/books/list")]
+    public async Task<IResult> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page <= 0 || pageSize <= 0)
+        {
+            return Results.BadRequest("Page and pageSize must be greater than zero.");
+        }
+
+        var paginatedBooks = await _bookService.GetBooks(page, pageSize);
+
+        if (paginatedBooks is null || !paginatedBooks.Items.Any())
+        {
+            return Results.NoContent(); 
+        }
+
+        return Results.Ok(paginatedBooks);
     }
 }
 

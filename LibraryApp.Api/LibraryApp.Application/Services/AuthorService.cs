@@ -78,4 +78,20 @@ public class AuthorService(IUnitOfWork unitOfWork)
         
         return author.Adapt<AuthorDto>();
     }
+    
+    public async Task<PaginatedPagedResult<AuthorDto>> GetPaginatedAuthors(int page, int pageSize)
+    {
+        var paginatedAuthors = await _unitOfWork.AuthorRepository.GetAuthors(page, pageSize);
+        
+        var authorsDto = paginatedAuthors.Items.Adapt<List<AuthorDto>>();
+
+        return new PaginatedPagedResult<AuthorDto>
+        {
+            Items = authorsDto,
+            TotalCount = paginatedAuthors.TotalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+    }
+
 }

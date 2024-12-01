@@ -11,4 +11,6 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 public interface IAuthorRepository : IRepository<AuthorEntity>
 {
     public Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id);
+    
+    public Task<PaginatedPagedResult<AuthorEntity>?> GetAuthors(int page, int pageSize);
 }

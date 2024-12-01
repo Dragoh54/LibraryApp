@@ -32,7 +32,7 @@ public class AuthorController : Controller
 
     [HttpGet]
     [Route("/authors/{id:Guid}")]
-    public async Task<IResult> GetAuthorById(Guid id)
+    public async Task<IResult> GetAuthorById([FromRoute]Guid id)
     {
         var author = await _authorService.GetAuthorById(id);
 
@@ -57,7 +57,7 @@ public class AuthorController : Controller
     [HttpPut]
     [Route("/authors/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateAuthor(Guid id, [FromBody] CreateAuthorDto authorDto)
+    public async Task<IResult> UpdateAuthor([FromRoute]Guid id, [FromBody] CreateAuthorDto authorDto)
     {
         ValidationResult result = await _validator.ValidateAsync(authorDto);
         if (!result.IsValid)
@@ -72,7 +72,7 @@ public class AuthorController : Controller
     [HttpDelete]
     [Route("/authors/delete/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteAuthor(Guid id)
+    public async Task<IResult> DeleteAuthor([FromRoute]Guid id)
     {
         var deletedAuthor = await _authorService.DeleteAuthor(id);
         return Results.Ok(deletedAuthor);
@@ -80,10 +80,25 @@ public class AuthorController : Controller
 
     [HttpGet]
     [Route("/authors/{id:Guid}/books")]
-    public async Task<IResult> GetBooksByAuthor(Guid id)
+    public async Task<IResult> GetBooksByAuthor([FromRoute]Guid id)
     {
         var books = await _authorService.GetAuthorBooks(id);
         return Results.Ok(books);
     }
+    
+    [HttpGet]
+    [Route("/authors/list/")]
+    public async Task<IResult> GetPaginatedAuthors([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page <= 0 || pageSize <= 0)
+        {
+            return Results.BadRequest("Page and pageSize must be greater than zero.");
+        }
+
+        var paginatedAuthors = await _authorService.GetPaginatedAuthors(page, pageSize);
+        return Results.Ok(paginatedAuthors);
+    }
+
+
 }
 

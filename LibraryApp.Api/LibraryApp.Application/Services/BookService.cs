@@ -132,4 +132,21 @@ public class BookService(IUnitOfWork unitOfWork)
         
         return book.Adapt<BookDto>();
     }
+    
+    public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
+    {
+        var paginatedBooks = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
+        if (paginatedBooks is null)
+        {
+            return null;
+        }
+
+        return new PaginatedPagedResult<BookDto>
+        {
+            Items = paginatedBooks.Items.Adapt<List<BookDto>>(),
+            TotalCount = paginatedBooks.TotalCount,
+            Page = paginatedBooks.Page,
+            PageSize = paginatedBooks.PageSize
+        };
+    }
 }
