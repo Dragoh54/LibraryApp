@@ -33,8 +33,4 @@
     <ProjectReference Include="..\LibraryApp.DataAccess\LibraryApp.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middlewares\" />
-  </ItemGroup>
-
 </Project>

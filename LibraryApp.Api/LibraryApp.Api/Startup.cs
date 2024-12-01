@@ -74,7 +74,7 @@ public class Startup
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
-        //app.UseExceptionHandler();
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         app.UseAuthentication();
         app.UseAuthorization();
