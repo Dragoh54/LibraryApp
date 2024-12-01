@@ -87,50 +87,28 @@ public class BookService(IUnitOfWork unitOfWork)
         return updatedBook;
     }
     
-    public async Task<BookDto> TakeBook(Guid id, TakeBookRequest bookRequest, string? userId)
+    public async Task<bool> TakeBook(Guid bookId, Guid userId)
     {
-        if (id == Guid.Empty)
+        var book = await _unitOfWork.BookRepository.Get(bookId);
+
+        if (book == null)
         {
-            throw new Exception("This book doesn't have an ID");
+            throw new Exception("Book not found.");
         }
 
-        if (string.IsNullOrEmpty(userId))
+        if (book.UserId.HasValue)
         {
-            throw new Exception("Incorrect user ID");
-        }
-    
-        if (bookRequest is null)
-        {
-            throw new Exception("This book request is null");
-        }
-    
-        if (bookRequest.ReturnDate < DateTime.Today)
-        {
-            throw new Exception("Incorrect return date");
-        }
-        
-        var book = await _unitOfWork.BookRepository.Get(id);
-        var user = await _unitOfWork.UserRepository.Get(Guid.Parse(userId));
-
-        if (book is null)
-        {
-            throw new Exception("Book with this id doesn't exist");
+            return false;
         }
 
-        if (user is null)
-        {
-            throw new Exception("Incorrect user ID");
-        }
-        
-        book.TakenAt = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc);
-        book.ReturnBy = DateTime.SpecifyKind(bookRequest.ReturnDate, DateTimeKind.Utc);
-        book.UserId = user.Id;
-        book.User = user;
-        
+        book.TakenAt = DateTime.UtcNow;
+        book.ReturnBy = DateTime.UtcNow.AddMonths(1);
+        book.UserId = userId;
+
         await _unitOfWork.BookRepository.Update(book);
         await _unitOfWork.BookRepository.SaveAsync();
-        
-        return book.Adapt<BookDto>();
+
+        return true; 
     }
     
     public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)

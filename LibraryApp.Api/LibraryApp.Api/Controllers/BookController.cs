@@ -92,14 +92,28 @@ public class BookController : Controller
     }
 
     [HttpPost]
-    [Route("/books/take/{id:Guid}")]
-    public async Task<IResult> TakeBook([FromRoute]Guid id, [FromBody] TakeBookRequest bookRequest)
+    [Route("/books/{bookId:Guid}/take")]
+    public async Task<IResult> TakeBook([FromRoute]Guid bookId)
     {
-        var userId = User.FindFirst("Id")?.Value;
-        var book = await _bookService.TakeBook(id, bookRequest, userId);
-        
-        
-        return Results.Ok(book);
+        try
+        {
+            var userIdClaim = Guid.Parse(User.FindFirst("Id")?.Value);
+
+            var success = await _bookService.TakeBook(bookId, userIdClaim);
+
+            if (success)
+            {
+                return Results.Ok("Book successfully reserved for one month.");
+            }
+            else
+            {
+                return Results.BadRequest("Failed to reserve the book.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
     }
     
     [HttpGet]
