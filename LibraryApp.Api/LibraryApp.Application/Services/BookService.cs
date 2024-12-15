@@ -90,6 +90,13 @@ public class BookService(IUnitOfWork unitOfWork)
     
     public async Task<bool> TakeBook(Guid bookId, Guid userId)
     {
+        var user = await _unitOfWork.UserRepository.Get(userId);
+
+        if (user is null)
+        {
+            throw new Exception("User not found.");
+        }
+        
         var book = await _unitOfWork.BookRepository.Get(bookId);
 
         if (book == null)

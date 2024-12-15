@@ -95,9 +95,6 @@ public class UserService
 
         await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
         await _unitOfWork.RefreshTokenRepository.SaveAsync(); 
-
-        await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
-        await _unitOfWork.RefreshTokenRepository.SaveAsync();
         
         httpContext.Response.Cookies.Delete("tasty-cookies");
         httpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");
