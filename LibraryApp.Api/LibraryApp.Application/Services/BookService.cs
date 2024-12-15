@@ -57,6 +57,7 @@ public class BookService(IUnitOfWork unitOfWork)
         var book = newBookDto.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
+        await _unitOfWork.BookRepository.SaveAsync();
 
         return newBookDto;
     }

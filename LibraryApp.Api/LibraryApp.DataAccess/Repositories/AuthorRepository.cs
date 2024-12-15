@@ -75,8 +75,6 @@ public class AuthorRepository : IAuthorRepository
         result.BirthDate = item.BirthDate;
         result.Books = item.Books;
 
-        await _dbContext.SaveChangesAsync();
-
         return result;
     }
 

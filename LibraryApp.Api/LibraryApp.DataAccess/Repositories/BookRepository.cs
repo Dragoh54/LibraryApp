@@ -108,8 +108,6 @@ public class BookRepository : IBookRepository
         result.User = item.User;
         result.UserId = item.UserId;
 
-        await _dbContext.SaveChangesAsync();
-
         return result;
     }
 }

@@ -41,6 +41,7 @@ public class UserService
         var user = new UserEntity(Guid.NewGuid(), username, email, hashedPassword, role);
 
         await _unitOfWork.UserRepository.Add(user);
+        await _unitOfWork.UserRepository.SaveAsync();
     }
 
     public async Task<(string, string)> Login(string email, string password)
@@ -68,6 +69,7 @@ public class UserService
         }
         
         await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.SaveAsync();
 
         return (token, refreshToken.Id.ToString());
     }
@@ -94,7 +96,8 @@ public class UserService
         await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
         await _unitOfWork.RefreshTokenRepository.SaveAsync(); 
 
-        _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.SaveAsync();
         
         httpContext.Response.Cookies.Delete("tasty-cookies");
         httpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");

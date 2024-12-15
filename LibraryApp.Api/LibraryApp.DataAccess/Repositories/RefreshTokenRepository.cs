@@ -49,8 +49,7 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         existingToken.ExpiryDate = item.ExpiryDate;
         existingToken.WhenUsed = item.WhenUsed;
         existingToken.IsUsed = item.IsUsed;
-
-        await _dbContext.SaveChangesAsync();
+        
         return existingToken;
     }
 

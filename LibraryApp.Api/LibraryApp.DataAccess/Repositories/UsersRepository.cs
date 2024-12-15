@@ -44,8 +44,6 @@ public class UsersRepository : IUserRepository
         result.Nickname = item.Nickname;
         result.PasswordHash = item.PasswordHash;
 
-        await _dbContext.SaveChangesAsync();
-
         return result;
     }
 
