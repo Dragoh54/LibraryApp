@@ -7,23 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.Results;
 using LibraryApp.DomainModel.Exceptions;
-using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Services;
 
-public class AuthorService
+public class AuthorService(IUnitOfWork unitOfWork)
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<CreateAuthorDto> _validator;
-
-    public AuthorService(IUnitOfWork unitOfWork, IValidator<CreateAuthorDto> validator)
-    {
-        _unitOfWork = unitOfWork;
-        _validator = validator;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IEnumerable<AuthorDto>> GetAllAuthors()
     {
@@ -57,12 +47,6 @@ public class AuthorService
 
     public async Task<AuthorDto> AddAuthor(CreateAuthorDto createAuthorDto)
     {
-        ValidationResult result = await _validator.ValidateAsync(createAuthorDto);
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
-        
         var author = createAuthorDto.Adapt<AuthorDto>(); 
         await _unitOfWork.AuthorRepository.Add(author.Adapt<AuthorEntity>());
         await _unitOfWork.AuthorRepository.SaveAsync();
@@ -72,12 +56,6 @@ public class AuthorService
 
     public async Task<AuthorDto> UpdateAuthor(Guid id, CreateAuthorDto authorDto)
     {
-        ValidationResult result = await _validator.ValidateAsync(authorDto);
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
-        
         var updatedAuthor = authorDto.Adapt<AuthorDto>();
         updatedAuthor.Id = id;
         
