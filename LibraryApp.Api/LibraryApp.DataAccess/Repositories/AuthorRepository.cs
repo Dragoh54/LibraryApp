@@ -33,7 +33,7 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
         return result.Books;
     }
 
-    public async Task<PaginatedPagedResult<AuthorEntity>?> GetAuthors(int page, int pageSize)
+    public async Task<(List<AuthorEntity>?, int)> GetAuthors(int page, int pageSize)
     {
         var totalCount = await _dbContext.Authors.CountAsync();
         var items = await _dbContext.Authors
@@ -43,12 +43,6 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
             .Take(pageSize)
             .ToListAsync();
 
-        return new PaginatedPagedResult<AuthorEntity>
-        {
-            Items = items,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return (items, totalCount);
     }
 }

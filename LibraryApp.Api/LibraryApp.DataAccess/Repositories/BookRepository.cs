@@ -25,7 +25,7 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
            .FirstOrDefaultAsync(b => b.ISBN == ISBN);
     }
 
-    public async Task<PaginatedPagedResult<BookEntity>?> GetBooks(int page, int pageSize)
+    public async Task<(List<BookEntity>?,  int)> GetBooks(int page, int pageSize)
     {
         var totalCount = await _dbContext.Books.CountAsync();
         var items = await _dbContext.Books
@@ -35,12 +35,6 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
             .Take(pageSize)
             .ToListAsync();
 
-        return new PaginatedPagedResult<BookEntity>
-        {
-            Items = items,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return (items, totalCount);
     }
 }

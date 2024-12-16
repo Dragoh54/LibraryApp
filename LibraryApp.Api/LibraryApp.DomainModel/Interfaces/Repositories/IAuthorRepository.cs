@@ -1,5 +1,4 @@
-﻿using LibraryApp.DataAccess.Dto;
-using LibraryApp.Entities.Models;
+﻿using LibraryApp.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +11,5 @@ public interface IAuthorRepository : IBaseRepository<AuthorEntity>
 {
     public Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id);
     
-    public Task<PaginatedPagedResult<AuthorEntity>?> GetAuthors(int page, int pageSize);
+    public Task<(List<AuthorEntity>?, int)> GetAuthors(int page, int pageSize);
 }

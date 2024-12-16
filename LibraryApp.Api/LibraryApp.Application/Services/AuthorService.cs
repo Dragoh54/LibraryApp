@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryApp.DomainModel.Exceptions;
 
 namespace LibraryApp.Application.Services;
 
@@ -26,7 +27,7 @@ public class AuthorService(IUnitOfWork unitOfWork)
 
         if (author is null)
         {
-            throw new Exception("Author with this id doesn't exist");
+            throw new NotFoundException("Author with this id doesn't exist");
         }
 
         return author.Adapt<AuthorDto>();
@@ -38,7 +39,7 @@ public class AuthorService(IUnitOfWork unitOfWork)
 
         if (books is null)
         {
-            throw new Exception("Author with this id doesn't exist");
+            throw new NotFoundException("Author's books with this id doesn't exist");
         }
 
         return books.Adapt<IEnumerable<BookDto>>();
@@ -70,7 +71,7 @@ public class AuthorService(IUnitOfWork unitOfWork)
 
         if (author is null)
         {
-            throw new Exception("Author with this id doesn't exist");
+            throw new NotFoundException("Author with this id doesn't exist");
         }
         
         await _unitOfWork.AuthorRepository.Delete(author);
@@ -83,17 +84,16 @@ public class AuthorService(IUnitOfWork unitOfWork)
     {
         if (page <= 0 || pageSize <= 0)
         {
-            throw new Exception("Page and pageSize must be greater than zero.");
+            throw new BadRequestException("Page and pageSize must be greater than zero.");
         }
+        var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(page, pageSize);
         
-        var paginatedAuthors = await _unitOfWork.AuthorRepository.GetAuthors(page, pageSize);
-        
-        var authorsDto = paginatedAuthors.Items.Adapt<List<AuthorDto>>();
+        var authors = items.Adapt<List<AuthorDto>>();
 
         return new PaginatedPagedResult<AuthorDto>
         {
-            Items = authorsDto,
-            TotalCount = paginatedAuthors.TotalCount,
+            Items = authors,
+            TotalCount = totalCount,
             Page = page,
             PageSize = pageSize
         };

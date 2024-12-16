@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LibraryApp.Application.Book;
+using LibraryApp.DomainModel.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Services;
@@ -28,7 +28,7 @@ public class BookService(IUnitOfWork unitOfWork)
 
         if(book is null)
         {
-            throw new Exception("Book with this id doesn't exist");
+            throw new NotFoundException("Book with this id doesn't exist");
         }
 
         return book.Adapt<BookDto>();
@@ -40,7 +40,7 @@ public class BookService(IUnitOfWork unitOfWork)
 
         if (book is null)
         {
-            throw new Exception("Book with this isbn doesn't exist");
+            throw new NotFoundException("Book with this isbn doesn't exist");
         }
 
         return book.Adapt<BookDto>();
@@ -51,7 +51,7 @@ public class BookService(IUnitOfWork unitOfWork)
         var author = await _unitOfWork.AuthorRepository.Get(newBookDto.AuthorId);
         if (author is null)
         {
-            throw new Exception("This book author doesn't exist.");
+            throw new NotFoundException("This book author doesn't exist.");
         }
 
         var book = newBookDto.Adapt<BookDto>();
@@ -68,7 +68,7 @@ public class BookService(IUnitOfWork unitOfWork)
 
         if (book is null)
         {
-            throw new Exception("Book with this id doesn't exist");
+            throw new NotFoundException("Book with this id doesn't exist");
         }
         
         await _unitOfWork.BookRepository.Delete(book);
@@ -94,14 +94,14 @@ public class BookService(IUnitOfWork unitOfWork)
 
         if (user is null)
         {
-            throw new Exception("User not found.");
+            throw new NotFoundException("User not found.");
         }
         
         var book = await _unitOfWork.BookRepository.Get(bookId);
 
         if (book == null)
         {
-            throw new Exception("Book not found.");
+            throw new NotFoundException("Book not found.");
         }
 
         if (book.UserId.HasValue)
@@ -118,26 +118,24 @@ public class BookService(IUnitOfWork unitOfWork)
 
         return true; 
     }
-    
+
     public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
     {
         if (page <= 0 || pageSize <= 0)
         {
             throw new ArgumentException("Page and pageSize must be greater than zero.");
         }
-        
-        var paginatedBooks = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
-        if (paginatedBooks is null)
-        {
-            return null;
-        }
+
+        var (items, totalCount) = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
+
+        var books = items.Adapt<List<BookDto>>();
 
         return new PaginatedPagedResult<BookDto>
         {
-            Items = paginatedBooks.Items.Adapt<List<BookDto>>(),
-            TotalCount = paginatedBooks.TotalCount,
-            Page = paginatedBooks.Page,
-            PageSize = paginatedBooks.PageSize
+            Items = books,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
         };
     }
 }

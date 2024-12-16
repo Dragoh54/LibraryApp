@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryApp.DomainModel.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -33,7 +34,7 @@ public class UserService
 
         if(candidate is not null)
         {
-            throw new Exception("User with this email already exists!");
+            throw new AlreadyExistsException("User with this email already exists!");
         }
 
         var hashedPassword = _passwordHasher.Generate(password);
@@ -50,14 +51,14 @@ public class UserService
 
         if (user is null)
         {
-            throw new Exception("Cannot found user with this email");
+            throw new NotFoundException("Cannot found user with this email");
         }
 
         var result = _passwordHasher.Verify(password, user.PasswordHash);
 
         if (!result)
         {
-            throw new Exception("Failed to login");
+            throw new BadRequestException("Failed to login");
         }
 
         var token = _jwtProvider.GenerateAccessToken(user);
@@ -65,7 +66,7 @@ public class UserService
         
         if (refreshToken is null || token is null)
         {
-            throw new Exception("Failed to generate tokens.");
+            throw new UnauthorizedAccessException("Failed to generate tokens.");
         }
         
         await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
@@ -80,14 +81,14 @@ public class UserService
 
         if (token is null)
         {
-            throw new Exception("Incorrect refresh token cookies");
+            throw new UnauthorizedAccessException("Incorrect refresh token cookies");
         }
 
         var refreshToken = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(token)).Result;
 
         if (refreshToken is null)
         {
-            throw new Exception("Refresh token not found");
+            throw new NotFoundException("Refresh token not found");
         }
 
         refreshToken.IsUsed = true;

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LibraryApp.DataAccess.Dto;
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
@@ -12,5 +11,5 @@ public interface IBookRepository : IBaseRepository<BookEntity>
 {
     public Task<BookEntity?> GetByISBN(string ISBN);
     
-    public Task<PaginatedPagedResult<BookEntity>?> GetBooks(int page, int pageSize);
+    public Task<(List<BookEntity>?, int)> GetBooks(int page, int pageSize);
 }

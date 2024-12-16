@@ -1,7 +1,6 @@
 ﻿using Azure.Core;
 using FluentValidation;
 using FluentValidation.Results;
-using LibraryApp.Application.Book;
 using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
 using LibraryApp.Entities.Models;
