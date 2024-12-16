@@ -81,6 +81,11 @@ public class AuthorService(IUnitOfWork unitOfWork)
     
     public async Task<PaginatedPagedResult<AuthorDto>> GetPaginatedAuthors(int page, int pageSize)
     {
+        if (page <= 0 || pageSize <= 0)
+        {
+            throw new Exception("Page and pageSize must be greater than zero.");
+        }
+        
         var paginatedAuthors = await _unitOfWork.AuthorRepository.GetAuthors(page, pageSize);
         
         var authorsDto = paginatedAuthors.Items.Adapt<List<AuthorDto>>();

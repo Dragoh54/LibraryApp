@@ -8,7 +8,7 @@ using LibraryApp.DataAccess.Dto;
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
-public interface IBookRepository : IRepository<BookEntity>
+public interface IBookRepository : IBaseRepository<BookEntity>
 {
     public Task<BookEntity?> GetByISBN(string ISBN);
     

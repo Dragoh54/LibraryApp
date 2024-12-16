@@ -90,11 +90,6 @@ public class AuthorController : Controller
     [Route("/authors/list/")]
     public async Task<IResult> GetPaginatedAuthors([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        if (page <= 0 || pageSize <= 0)
-        {
-            return Results.BadRequest("Page and pageSize must be greater than zero.");
-        }
-
         var paginatedAuthors = await _authorService.GetPaginatedAuthors(page, pageSize);
         return Results.Ok(paginatedAuthors);
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
-public interface IAuthorRepository : IRepository<AuthorEntity>
+public interface IAuthorRepository : IBaseRepository<AuthorEntity>
 {
     public Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id);
     

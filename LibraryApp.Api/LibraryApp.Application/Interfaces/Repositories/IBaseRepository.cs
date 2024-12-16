@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
-public interface IRepository<T> 
-    where T : class 
+public interface IBaseRepository<T> 
 {
     public Task<IEnumerable<T>> GetAll();
     public Task<T?> Get(Guid id);

@@ -2,7 +2,7 @@
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
-public interface IRefreshTokenRepository : IRepository<RefreshToken>
+public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
 {
     public Task<RefreshToken?> GetByUserId(Guid userId);
 }

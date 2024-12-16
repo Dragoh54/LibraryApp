@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Entities.Models;
 
-public class BookEntity
+public class BookEntity : IdEntity 
 {
-    public Guid Id { get; set; }
     public string ISBN { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Genre { get; set; } = string.Empty;

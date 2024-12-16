@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Application.Interfaces.Repositories;
 
-public interface IUserRepository : IRepository<UserEntity>
+public interface IUserRepository : IBaseRepository<UserEntity>
 {
     public Task<UserEntity?> GetByEmail(string email);
 }

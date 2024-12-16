@@ -1,8 +1,7 @@
 ﻿namespace LibraryApp.Entities.Models;
 
-public class RefreshToken
+public class RefreshToken : IdEntity
 {
-    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public DateTime ExpiryDate { get; set; }
     public bool IsUsed { get; set; } = false;

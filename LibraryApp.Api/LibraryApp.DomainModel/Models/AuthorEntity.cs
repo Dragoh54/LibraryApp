@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Entities.Models;
 
-public class AuthorEntity
+public class AuthorEntity : IdEntity
 {
-    public Guid Id { get; set; }
     public string Surname { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
