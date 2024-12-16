@@ -111,41 +111,27 @@ public class BookService
     
     public async Task<bool> TakeBook(Guid bookId, string userIdClaim)
     {
-        try
+        var userId = Guid.Parse(userIdClaim);
+    
+        var user = await _unitOfWork.UserRepository.Get(userId)
+                   ?? throw new NotFoundException("User not found.");
+
+        var book = await _unitOfWork.BookRepository.Get(bookId)
+                   ?? throw new NotFoundException("Book not found.");
+
+        if (book.UserId.HasValue)
         {
-            var userId = Guid.Parse(userIdClaim);
-            var user = await _unitOfWork.UserRepository.Get(userId);
-
-            if (user is null)
-            {
-                throw new NotFoundException("User not found.");
-            }
-
-            var book = await _unitOfWork.BookRepository.Get(bookId);
-
-            if (book == null)
-            {
-                throw new NotFoundException("Book not found.");
-            }
-
-            if (book.UserId.HasValue)
-            {
-                return false;
-            }
-
-            book.TakenAt = DateTime.UtcNow;
-            book.ReturnBy = DateTime.UtcNow.AddMonths(1);
-            book.UserId = userId;
-
-            await _unitOfWork.BookRepository.Update(book);
-            await _unitOfWork.BookRepository.SaveAsync();
-
-            return true;
+            throw new BadRequestException("This book is already taken.");
         }
-        catch (Exception ex)
-        {
-            return false;
-        }
+
+        book.TakenAt = DateTime.UtcNow;
+        book.ReturnBy = DateTime.UtcNow.AddMonths(1);
+        book.UserId = userId;
+
+        await _unitOfWork.BookRepository.Update(book);
+        await _unitOfWork.BookRepository.SaveAsync();
+
+        return true;
     }
 
     public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
