@@ -27,11 +27,6 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
 
     public async Task<PaginatedPagedResult<BookEntity>?> GetBooks(int page, int pageSize)
     {
-        if (page <= 0 || pageSize <= 0)
-        {
-            throw new ArgumentException("Page and pageSize must be greater than zero.");
-        }
-
         var totalCount = await _dbContext.Books.CountAsync();
         var items = await _dbContext.Books
             .AsNoTracking()

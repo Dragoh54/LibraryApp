@@ -35,11 +35,6 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
 
     public async Task<PaginatedPagedResult<AuthorEntity>?> GetAuthors(int page, int pageSize)
     {
-        if (page <= 0 || pageSize <= 0)
-        {
-            throw new ArgumentException("Page and pageSize must be greater than zero.");
-        }
-
         var totalCount = await _dbContext.Authors.CountAsync();
         var items = await _dbContext.Authors
             .AsNoTracking()

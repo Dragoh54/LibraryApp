@@ -121,6 +121,11 @@ public class BookService(IUnitOfWork unitOfWork)
     
     public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
     {
+        if (page <= 0 || pageSize <= 0)
+        {
+            throw new ArgumentException("Page and pageSize must be greater than zero.");
+        }
+        
         var paginatedBooks = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
         if (paginatedBooks is null)
         {
