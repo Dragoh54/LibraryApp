@@ -46,7 +46,6 @@ public class BookService
     public async Task<BookDto> GetBookByIsbn(string isbn)
     {
         var book = await _unitOfWork.BookRepository.GetByISBN(isbn);
-
         if (book is null)
         {
             throw new NotFoundException("Book with this isbn doesn't exist");
@@ -63,13 +62,19 @@ public class BookService
             throw new ValidationException(result.Errors);
         }
         
+        var tempBook = await _unitOfWork.BookRepository.GetByISBN(newBookDto.ISBN);
+        if (tempBook != null)
+        {
+            throw new AlreadyExistsException("A book with this ISBN already exists.");
+        }
+        
         var author = await _unitOfWork.AuthorRepository.Get(newBookDto.AuthorId);
         if (author is null)
         {
             throw new NotFoundException("This book author doesn't exist.");
         }
 
-        var book = newBookDto.Adapt<BookDto>();
+        var book = tempBook.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
         await _unitOfWork.BookRepository.SaveAsync();
@@ -98,6 +103,12 @@ public class BookService
         if (!result.IsValid)
         {
             throw new ValidationException(result.Errors);
+        }
+        
+        var existingBook = await _unitOfWork.BookRepository.GetByISBN(bookDto.ISBN);
+        if (existingBook != null)
+        {
+            throw new AlreadyExistsException("A book with this ISBN already exists.");
         }
         
         var updatedBook = bookDto.Adapt<BookDto>();

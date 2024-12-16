@@ -188,15 +188,6 @@ public class DataSeeder
             }
         };
 
-        //foreach (var book in books)
-        //{
-        //    var author = authors.FirstOrDefault(a => a.Id == book.AuthorId);
-        //    if (author is not null)
-        //    {
-        //        author.Books.Add(book);
-        //    }
-        //}
-
         if (!_dbContext.Authors.Any())
         {
             _dbContext.Authors.AddRange(authors);

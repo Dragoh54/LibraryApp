@@ -17,6 +17,7 @@ public class BookConfiguration : IEntityTypeConfiguration<BookEntity>
 
         builder.Property(b => b.Id).IsRequired();
         builder.Property(b => b.ISBN).HasMaxLength(256).IsRequired();
+        builder.HasIndex(b => b.ISBN).IsUnique();
         builder.Property(b => b.Title).HasMaxLength(256).IsRequired();
         builder.Property(b => b.Genre).HasMaxLength(256).IsRequired();
         builder.Property(b => b.Description).HasMaxLength(256).IsRequired();
