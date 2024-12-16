@@ -7,14 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
 using LibraryApp.DomainModel.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Services;
 
-public class BookService(IUnitOfWork unitOfWork)
+public class BookService
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateBookDto> _validator;
+
+    public BookService(IUnitOfWork unitOfWork, IValidator<CreateBookDto> validator)
+    {
+        _unitOfWork = unitOfWork;
+        _validator = validator;
+    }
 
     public async Task<IEnumerable<BookDto>> GetAllBooks()
     {
@@ -48,6 +57,12 @@ public class BookService(IUnitOfWork unitOfWork)
 
     public async Task<CreateBookDto> AddBook(CreateBookDto newBookDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(newBookDto);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
+        
         var author = await _unitOfWork.AuthorRepository.Get(newBookDto.AuthorId);
         if (author is null)
         {
@@ -79,6 +94,12 @@ public class BookService(IUnitOfWork unitOfWork)
 
     public async Task<BookDto> UpdateBook(Guid id, CreateBookDto bookDto)
     {
+        ValidationResult result = await _validator.ValidateAsync(bookDto);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
+        
         var updatedBook = bookDto.Adapt<BookDto>();
         updatedBook.Id = id;
 
@@ -88,35 +109,43 @@ public class BookService(IUnitOfWork unitOfWork)
         return updatedBook;
     }
     
-    public async Task<bool> TakeBook(Guid bookId, Guid userId)
+    public async Task<bool> TakeBook(Guid bookId, string userIdClaim)
     {
-        var user = await _unitOfWork.UserRepository.Get(userId);
-
-        if (user is null)
+        try
         {
-            throw new NotFoundException("User not found.");
-        }
-        
-        var book = await _unitOfWork.BookRepository.Get(bookId);
+            var userId = Guid.Parse(userIdClaim);
+            var user = await _unitOfWork.UserRepository.Get(userId);
 
-        if (book == null)
-        {
-            throw new NotFoundException("Book not found.");
-        }
+            if (user is null)
+            {
+                throw new NotFoundException("User not found.");
+            }
 
-        if (book.UserId.HasValue)
+            var book = await _unitOfWork.BookRepository.Get(bookId);
+
+            if (book == null)
+            {
+                throw new NotFoundException("Book not found.");
+            }
+
+            if (book.UserId.HasValue)
+            {
+                return false;
+            }
+
+            book.TakenAt = DateTime.UtcNow;
+            book.ReturnBy = DateTime.UtcNow.AddMonths(1);
+            book.UserId = userId;
+
+            await _unitOfWork.BookRepository.Update(book);
+            await _unitOfWork.BookRepository.SaveAsync();
+
+            return true;
+        }
+        catch (Exception ex)
         {
             return false;
         }
-
-        book.TakenAt = DateTime.UtcNow;
-        book.ReturnBy = DateTime.UtcNow.AddMonths(1);
-        book.UserId = userId;
-
-        await _unitOfWork.BookRepository.Update(book);
-        await _unitOfWork.BookRepository.SaveAsync();
-
-        return true; 
     }
 
     public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
