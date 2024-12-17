@@ -17,12 +17,10 @@ namespace LibraryApp.Application.Services;
 public class BookService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<CreateBookDto> _validator;
 
-    public BookService(IUnitOfWork unitOfWork, IValidator<CreateBookDto> validator)
+    public BookService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _validator = validator;
     }
 
     public async Task<IEnumerable<BookDto>> GetAllBooks()
@@ -62,12 +60,6 @@ public class BookService
 
     public async Task<CreateBookDto> AddBook(CreateBookDto newBookDto)
     {
-        ValidationResult result = await _validator.ValidateAsync(newBookDto);
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
-        
         var tempBook = await _unitOfWork.BookRepository.GetByISBN(newBookDto.ISBN);
         if (tempBook != null)
         {
@@ -107,12 +99,6 @@ public class BookService
     {
         _ = await _unitOfWork.AuthorRepository.Get(id) ?? 
             throw new NotFoundException("Book with this id doesn't exist");
-        
-        ValidationResult result = await _validator.ValidateAsync(bookDto);
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
         
         var existingBook = await _unitOfWork.BookRepository.GetByISBN(bookDto.ISBN);
         if (existingBook != null)

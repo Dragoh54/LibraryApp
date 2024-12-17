@@ -35,6 +35,14 @@ public class Startup
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
 
+        services.AddControllersWithViews(options =>
+        {
+            options.Filters.Add<ValidationFilter>();
+        });
+        
+        services.AddScoped<IValidator<CreateBookDto>, CreateBookDtoValidator>();
+        services.AddScoped<IValidator<CreateAuthorDto>, CreateAuthorDtoValidator>();
+
         services.AddControllersWithViews();
 
         services.AddApiAuthenfication(Configuration);
@@ -47,9 +55,6 @@ public class Startup
         services.AddScoped<IUserRepository, UsersRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-
-        services.AddScoped<IValidator<CreateBookDto>, CreateBookDtoValidator>();
-        services.AddScoped<IValidator<CreateAuthorDto>, CreateAuthorDtoValidator>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
