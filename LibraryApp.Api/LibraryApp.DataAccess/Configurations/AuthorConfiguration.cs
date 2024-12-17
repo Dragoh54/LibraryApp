@@ -17,6 +17,7 @@ public class AuthorConfiguration : IEntityTypeConfiguration<AuthorEntity>
 
         builder.Property(a => a.Id).IsRequired();
         builder.Property(a => a.Surname).HasMaxLength(256).IsRequired();
+        builder.HasIndex(a => a.Surname).IsUnique();
         builder.Property(a => a.Country).HasMaxLength(256).IsRequired();
         builder.Property(a => a.BirthDate).IsRequired();
 
