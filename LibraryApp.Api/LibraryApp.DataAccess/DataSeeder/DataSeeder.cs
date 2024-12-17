@@ -22,46 +22,45 @@ public class DataSeeder
 
     public void Seed()
     {
-        List<AuthorEntity> authors = new List<AuthorEntity>
-        {
-            new AuthorEntity
-            {
-                Id = Guid.NewGuid(),
-                Surname = "Tolkien",
-                Country = "United Kingdom",
-                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1892-01-03"), DateTimeKind.Utc),
-            },
-            new AuthorEntity
-            {
-                Id = Guid.NewGuid(),
-                Surname = "Rowling",
-                Country = "United Kingdom",
-                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1965-07-31"), DateTimeKind.Utc),
-            },
-            new AuthorEntity
-            {
-                Id = Guid.NewGuid(),
-                Surname = "Martin",
-                Country = "United States",
-                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1948-09-20"), DateTimeKind.Utc),
-            },
-            new AuthorEntity
-            {
-                Id = Guid.NewGuid(),
-                Surname = "Orwell",
-                Country = "United Kingdom",
-                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1903-06-25"), DateTimeKind.Utc),
-            },
-            new AuthorEntity
-            {
-                Id = Guid.NewGuid(),
-                Surname = "Austen",
-                Country = "United Kingdom",
-                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1775-12-16"), DateTimeKind.Utc),
-            }
-        };
+        var users = GenerateUsers();
+        var authors = GenerateAuthors();
+        var books = GenerateBooks(authors, users);
+        
+        SeedUsers(users);
+        SeedAuthors(authors);
+        SeedBooks(books);
+    }
 
-        List<UserEntity> users = new List<UserEntity>
+    private void SeedUsers(List<UserEntity> users)
+    {
+        if (!_dbContext.Users.Any())
+        {
+            _dbContext.Users.AddRange(users);
+            _dbContext.SaveChanges();
+        }
+    }
+
+    private void SeedAuthors(List<AuthorEntity> authors)
+    {
+        if (!_dbContext.Authors.Any())
+        {
+            _dbContext.Authors.AddRange(authors);
+            _dbContext.SaveChanges();
+        }
+    }
+
+    private void SeedBooks(List<BookEntity> books)
+    {
+        if (!_dbContext.Books.Any())
+        {
+            _dbContext.Books.AddRange(books);
+            _dbContext.SaveChanges();
+        }
+    }
+
+    private List<UserEntity> GenerateUsers()
+    {
+        return new List<UserEntity>
         {
             new UserEntity
             {
@@ -104,8 +103,53 @@ public class DataSeeder
                 Role = Role.User
             }
         };
+    }
 
-        List<BookEntity> books = new List<BookEntity>
+    private List<AuthorEntity> GenerateAuthors()
+    {
+        return new List<AuthorEntity>
+        {
+            new AuthorEntity
+            {
+                Id = Guid.NewGuid(),
+                Surname = "Tolkien",
+                Country = "United Kingdom",
+                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1892-01-03"), DateTimeKind.Utc),
+            },
+            new AuthorEntity
+            {
+                Id = Guid.NewGuid(),
+                Surname = "Rowling",
+                Country = "United Kingdom",
+                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1965-07-31"), DateTimeKind.Utc),
+            },
+            new AuthorEntity
+            {
+                Id = Guid.NewGuid(),
+                Surname = "Martin",
+                Country = "United States",
+                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1948-09-20"), DateTimeKind.Utc),
+            },
+            new AuthorEntity
+            {
+                Id = Guid.NewGuid(),
+                Surname = "Orwell",
+                Country = "United Kingdom",
+                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1903-06-25"), DateTimeKind.Utc),
+            },
+            new AuthorEntity
+            {
+                Id = Guid.NewGuid(),
+                Surname = "Austen",
+                Country = "United Kingdom",
+                BirthDate = DateTime.SpecifyKind(DateTime.Parse("1775-12-16"), DateTimeKind.Utc),
+            }
+        };
+    }
+
+    private List<BookEntity> GenerateBooks(List<AuthorEntity> authors, List<UserEntity> users )
+    {
+        return new List<BookEntity>
         {
             new BookEntity
             {
@@ -187,23 +231,6 @@ public class DataSeeder
                 AuthorId = authors[1].Id
             }
         };
-
-        if (!_dbContext.Authors.Any())
-        {
-            _dbContext.Authors.AddRange(authors);
-        }
-
-        if (!_dbContext.Users.Any())
-        {
-            _dbContext.Users.AddRange(users);
-        }
-
-        if (!_dbContext.Books.Any())
-        {
-            _dbContext.Books.AddRange(books);
-        }
-
-        _dbContext.SaveChanges();
     }
 }
 

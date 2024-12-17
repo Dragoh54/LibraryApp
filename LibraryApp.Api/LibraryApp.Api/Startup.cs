@@ -73,7 +73,7 @@ public class Startup
 
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, string[] args)
     {
         app.UseHttpsRedirection();
         app.UseStaticFiles();
@@ -102,13 +102,16 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-
-        using (var scope = app.ApplicationServices.CreateScope())
+        
+        if (args.Contains("--seed"))
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<LibraryAppDbContext>();
-            dbContext.Database.Migrate();
-            var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-            seeder.Seed();
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<LibraryAppDbContext>();
+                dbContext.Database.Migrate();
+                var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+                seeder.Seed();
+            }
         }
     }
 }
