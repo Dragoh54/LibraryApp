@@ -28,6 +28,12 @@ public class AuthorService
     public async Task<IEnumerable<AuthorDto>> GetAllAuthors()
     {
         var authors = await _unitOfWork.AuthorRepository.GetAll();
+
+        if (!authors.Any())
+        {
+            throw new NotFoundException("No authors found");
+        }
+        
         return authors.Adapt<IEnumerable<AuthorDto>>();
     }
 
@@ -72,6 +78,9 @@ public class AuthorService
 
     public async Task<AuthorDto> UpdateAuthor(Guid id, CreateAuthorDto authorDto)
     {
+        _ = await _unitOfWork.AuthorRepository.Get(id) ?? 
+            throw new NotFoundException("Author with this id doesn't exist");
+        
         ValidationResult result = await _validator.ValidateAsync(authorDto);
         if (!result.IsValid)
         {
@@ -109,6 +118,11 @@ public class AuthorService
             throw new BadRequestException("Page and pageSize must be greater than zero.");
         }
         var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(page, pageSize);
+
+        if (items is null)
+        {
+            throw new NotFoundException("There are no authors in the database.");
+        }
         
         var authors = items.Adapt<List<AuthorDto>>();
 

@@ -28,6 +28,12 @@ public class BookService
     public async Task<IEnumerable<BookDto>> GetAllBooks()
     {
         var books = await _unitOfWork.BookRepository.GetAll();
+        
+        if (!books.Any())
+        {
+            throw new NotFoundException("No books found");
+        }
+        
         return books.Adapt<IEnumerable<BookDto>>();
     }
 
@@ -99,6 +105,9 @@ public class BookService
 
     public async Task<BookDto> UpdateBook(Guid id, CreateBookDto bookDto)
     {
+        _ = await _unitOfWork.AuthorRepository.Get(id) ?? 
+            throw new NotFoundException("Book with this id doesn't exist");
+        
         ValidationResult result = await _validator.ValidateAsync(bookDto);
         if (!result.IsValid)
         {
@@ -124,7 +133,7 @@ public class BookService
     {
         var userId = Guid.Parse(userIdClaim);
     
-        var user = await _unitOfWork.UserRepository.Get(userId)
+        _ = await _unitOfWork.UserRepository.Get(userId)
                    ?? throw new NotFoundException("User not found.");
 
         var book = await _unitOfWork.BookRepository.Get(bookId)
@@ -153,6 +162,11 @@ public class BookService
         }
 
         var (items, totalCount) = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
+
+        if (items is null)
+        {
+            throw new NotFoundException("No books found");
+        }
 
         var books = items.Adapt<List<BookDto>>();
 

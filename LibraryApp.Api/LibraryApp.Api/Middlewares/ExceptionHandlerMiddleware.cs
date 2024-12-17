@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
+using FluentValidation;
 using LibraryApp.DomainModel.Exceptions;
 
 public class ExceptionHandlerMiddleware
@@ -33,7 +34,7 @@ public class ExceptionHandlerMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = exception switch
         {
-            BadRequestException or ArgumentException => StatusCodes.Status400BadRequest,
+            BadRequestException or ArgumentException or ValidationException => StatusCodes.Status400BadRequest,
             UnauthorizedException  => StatusCodes.Status401Unauthorized,
             UnauthorizedAccessException => StatusCodes.Status403Forbidden,
             NotFoundException => StatusCodes.Status404NotFound,
