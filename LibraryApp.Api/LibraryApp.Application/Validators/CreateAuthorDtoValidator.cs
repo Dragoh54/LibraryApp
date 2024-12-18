@@ -3,7 +3,7 @@ using LibraryApp.DataAccess.Dto;
 
 namespace LibraryApp.Application.Validators;
 
-public class CreateAuthorDtoValidator : AbstractValidator<CreateAuthorDto>
+public class CreateAuthorDtoValidator<T> : AbstractValidator<T> where T : CreateAuthorDto
 {
     public CreateAuthorDtoValidator()
     {

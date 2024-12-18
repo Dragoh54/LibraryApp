@@ -37,14 +37,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
-
+        
         // services.AddControllersWithViews(options =>
         // {
         //     options.Filters.Add<ValidationFilter>();
         // });
-        
-        services.AddScoped<IValidator<CreateBookDto>, CreateBookDtoValidator>();
-        services.AddScoped<IValidator<CreateAuthorDto>, CreateAuthorDtoValidator>();
 
         services.AddControllersWithViews();
 
@@ -65,10 +62,10 @@ public class Startup
         services.AddScoped<BookService>();
         services.AddScoped<AuthorService>();
         
-        services.AddMediatRServices();
-
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        
+        services.AddMediatRServices();
         
         services.AddScoped<AllowAnonymousOnlyFilter>();
 

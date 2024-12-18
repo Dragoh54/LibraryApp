@@ -15,7 +15,7 @@ public static class MediatRServices
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
-        
+
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

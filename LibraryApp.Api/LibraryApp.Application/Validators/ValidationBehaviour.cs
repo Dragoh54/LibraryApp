@@ -7,9 +7,10 @@ using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace LibraryApp.Application.Validators;
 
-public class ValidationBehaviour <TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
 {
-    private readonly IEnumerable<IValidator> _validators;
+    private readonly IEnumerable<IValidator<TRequest>> _validators;
  
     public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
     {
