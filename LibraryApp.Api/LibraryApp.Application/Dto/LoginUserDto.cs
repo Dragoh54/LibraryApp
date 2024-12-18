@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Application.User;
 
-public record LoginUserRequest(
+public record LoginUserDto(
     [Required] string Email,
     [Required] string Password
     );

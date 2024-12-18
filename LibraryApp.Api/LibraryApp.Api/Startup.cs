@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
 using LibraryApp.Application.Interfaces.Auth;
 using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.Application.Interfaces.UnitOfWork;
@@ -16,8 +17,10 @@ using LibraryApp.Api.Extensions;
 using LibraryApp.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Api.Requirements;
+using LibraryApp.Application.Extensions;
 using LibraryApp.Application.Validators;
 using LibraryApp.DataAccess.Dto;
+using MediatR;
 using Microsoft.Extensions.Options;
 
 namespace LibraryApp.Api;
@@ -35,10 +38,10 @@ public class Startup
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
 
-        services.AddControllersWithViews(options =>
-        {
-            options.Filters.Add<ValidationFilter>();
-        });
+        // services.AddControllersWithViews(options =>
+        // {
+        //     options.Filters.Add<ValidationFilter>();
+        // });
         
         services.AddScoped<IValidator<CreateBookDto>, CreateBookDtoValidator>();
         services.AddScoped<IValidator<CreateAuthorDto>, CreateAuthorDtoValidator>();
@@ -61,6 +64,8 @@ public class Startup
         services.AddScoped<UserService>();
         services.AddScoped<BookService>();
         services.AddScoped<AuthorService>();
+        
+        services.AddMediatRServices();
 
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

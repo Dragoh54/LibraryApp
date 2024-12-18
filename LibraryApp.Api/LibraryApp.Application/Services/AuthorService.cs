@@ -18,7 +18,7 @@ public class AuthorService
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public AuthorService(IUnitOfWork unitOfWork, IValidator<CreateAuthorDto> validator)
+    public AuthorService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

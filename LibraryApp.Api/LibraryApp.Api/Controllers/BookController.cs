@@ -26,7 +26,6 @@ public class BookController : Controller
     public async Task<IResult> GetAllBooks()
     {
         var books = await _bookService.GetAllBooks();
-
         return Results.Ok(books);
     }
 
@@ -35,7 +34,6 @@ public class BookController : Controller
     public async Task<IResult> GetBookById([FromRoute]Guid id)
     {
         var book = await _bookService.GetBookById(id);
-
         return Results.Ok(book);
     }
 
@@ -44,7 +42,6 @@ public class BookController : Controller
     public async Task<IResult> GetBookByIsbn([FromRoute]string isbn)
     {
         var book = await _bookService.GetBookByIsbn(isbn);
-
         return Results.Ok(book);
     }
 

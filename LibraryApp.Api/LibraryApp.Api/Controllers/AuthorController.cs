@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using LibraryApp.Application.Services;
+using LibraryApp.Application.UseCases.Author.Command.AddAuthorCommand;
 using LibraryApp.DataAccess.Dto;
+using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +16,12 @@ namespace LibraryApp.Api.Controllers;
 public class AuthorController : Controller
 {
     private readonly AuthorService _authorService;
+    private readonly IMediator _mediator;
 
-    public AuthorController(AuthorService authorService)
+    public AuthorController(AuthorService authorService, IMediator mediator)
     {
         _authorService = authorService;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     [HttpGet]
@@ -24,7 +29,6 @@ public class AuthorController : Controller
     public async Task<IResult> GetAllAuthors()
     {
         var authors = await _authorService.GetAllAuthors();
-
         return Results.Ok(authors);
     }
 
@@ -33,18 +37,26 @@ public class AuthorController : Controller
     public async Task<IResult> GetAuthorById([FromRoute]Guid id)
     {
         var author = await _authorService.GetAuthorById(id);
-
         return Results.Ok(author);
     }
-
+    
     [HttpPost]
     [Route("/authors/add")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> AddAuthor([FromBody] CreateAuthorDto authorDto)
+    public async Task<IResult> AddAuthor([FromBody] AddAuthorCommand authorDto, CancellationToken token)
     {
-        var author = await _authorService.AddAuthor(authorDto);
+        var author = await _mediator.Send(authorDto, token);
         return Results.Ok(author);
     }
+
+    // [HttpPost]
+    // [Route("/authors/add")]
+    // [Authorize(Policy = "Admin")]
+    // public async Task<IResult> AddAuthor([FromBody] CreateAuthorDto authorDto)
+    // {
+    //     var author = await _authorService.AddAuthor(authorDto);
+    //     return Results.Ok(author);
+    // }
 
     [HttpPut]
     [Route("/authors/update/{id:Guid}")]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.Application.User;
 
-public record RegisterUserRequest(
+public record RegisterUserDto(
     [Required] string Nickname,
     [Required] string Password,
     [Required] string Email

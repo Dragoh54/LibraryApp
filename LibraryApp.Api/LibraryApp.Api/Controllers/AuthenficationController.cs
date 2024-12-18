@@ -27,9 +27,9 @@ public class AuthenficationController : Controller
 
     [HttpPost("/login")]
     [ServiceFilter(typeof(AllowAnonymousOnlyFilter))]
-    public async Task<IResult> Login(LoginUserRequest request)
+    public async Task<IResult> Login(LoginUserDto dto)
     {
-        var (token, refreshToken) = await _userService.Login(request.Email, request.Password);
+        var (token, refreshToken) = await _userService.Login(dto.Email, dto.Password);
         
         HttpContext.Response.Cookies.Append("tasty-cookies", token, new CookieOptions()
         {
@@ -50,9 +50,9 @@ public class AuthenficationController : Controller
     }
 
     [HttpPost("/register")]
-    public async Task<IResult> Register(RegisterUserRequest request)
+    public async Task<IResult> Register(RegisterUserDto dto)
     {
-        await _userService.Register(request.Nickname, request.Email, request.Password);
+        await _userService.Register(dto.Nickname, dto.Email, dto.Password);
         return Results.Ok();
     }
 

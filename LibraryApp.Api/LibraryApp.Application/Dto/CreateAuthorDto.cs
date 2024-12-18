@@ -1,6 +1,6 @@
 ﻿namespace LibraryApp.DataAccess.Dto;
 
-public class CreateAuthorDto
+public record CreateAuthorDto
 {
     public string Surname { get; set; } = string.Empty;
     public string Country {  get; set; } = string.Empty;
