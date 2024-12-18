@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using LibraryApp.Application.Services;
 using LibraryApp.Application.UseCases.Author.Command.AddAuthorCommand;
+using LibraryApp.Application.UseCases.Author.Command.DeleteAuthorCommand;
 using LibraryApp.DataAccess.Dto;
 using MapsterMapper;
 using MediatR;
@@ -61,20 +62,29 @@ public class AuthorController : Controller
     [HttpPut]
     [Route("/authors/update/{id:Guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateAuthor([FromRoute]Guid id, [FromBody] CreateAuthorDto authorDto)
+    public async Task<IResult> UpdateAuthor([FromForm]Guid id, [FromBody] CreateAuthorDto authorDto)
     {
         var newAuthor = await _authorService.UpdateAuthor(id, authorDto);
         return Results.Ok(newAuthor);
     }
-
+    
     [HttpDelete]
-    [Route("/authors/delete/{id:Guid}")]
+    [Route("/authors/delete/")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteAuthor([FromRoute]Guid id)
+    public async Task<IResult> DeleteAuthor([FromQuery] DeleteAuthorCommand authorDto, CancellationToken token)
     {
-        var deletedAuthor = await _authorService.DeleteAuthor(id);
-        return Results.Ok(deletedAuthor);
+        var author = await _mediator.Send(authorDto, token);
+        return Results.Ok(author);
     }
+
+    // [HttpDelete]
+    // [Route("/authors/delete/{id:Guid}")]
+    // [Authorize(Policy = "Admin")]
+    // public async Task<IResult> DeleteAuthor([FromRoute]Guid id)
+    // {
+    //     var deletedAuthor = await _authorService.DeleteAuthor(id);
+    //     return Results.Ok(deletedAuthor);
+    // }
 
     [HttpGet]
     [Route("/authors/{id:Guid}/books")]
