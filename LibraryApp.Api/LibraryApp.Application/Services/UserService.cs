@@ -101,6 +101,8 @@ public class UserService
         httpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");
     }
     
+    //TODO: ADD CONSTANTS
+    //TODO: REMOVE VAR
     public async Task<string> Refresh(HttpContext httpContext)
     {
         var refreshToken = httpContext.Request.Cookies["not-a-refresh-token-cookies"];
@@ -109,7 +111,7 @@ public class UserService
             throw new UnauthorizedAccessException("Refresh token is missing.");
         }
         
-        var token = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken)).Result;
+        var token = await _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken));
         
         if (token is null)
         {
