@@ -5,6 +5,10 @@ using LibraryApp.Application.Services;
 using LibraryApp.Application.UseCases.Author.Command.AddAuthorCommand;
 using LibraryApp.Application.UseCases.Author.Command.DeleteAuthorCommand;
 using LibraryApp.Application.UseCases.Author.Command.UpdateAuthorCommand;
+using LibraryApp.Application.UseCases.Author.Querry.GetAllAuthorsQuery;
+using LibraryApp.Application.UseCases.Author.Querry.GetAuthorByIdQuerry;
+using LibraryApp.Application.UseCases.Author.Querry.GetBooksByAuthorQuery;
+using LibraryApp.Application.UseCases.Author.Querry.GetPaginatedAuthorsQuery;
 using LibraryApp.DataAccess.Dto;
 using MapsterMapper;
 using MediatR;
@@ -26,20 +30,20 @@ public class AuthorController : Controller
         _authorService = authorService;
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
-
+    
     [HttpGet]
-    [Route("/authors")]
-    public async Task<IResult> GetAllAuthors()
+    [Route("/authors/all")]
+    public async Task<IResult> GetAllAuthors(CancellationToken cancellationToken)
     {
-        var authors = await _authorService.GetAllAuthors();
+        var authors = await _mediator.Send(new GetAllAuthorsQuery(), cancellationToken);
         return Results.Ok(authors);
     }
-
+    
     [HttpGet]
-    [Route("/authors/{id:Guid}")]
-    public async Task<IResult> GetAuthorById([FromRoute]Guid id)
+    [Route("/authors/")]
+    public async Task<IResult> GetAuthorById([FromQuery]GetAuthorByIdQuery query, CancellationToken cancellationToken)
     {
-        var author = await _authorService.GetAuthorById(id);
+        var author = await _mediator.Send(query, cancellationToken);
         return Results.Ok(author);
     }
     
@@ -60,15 +64,6 @@ public class AuthorController : Controller
         var author = await _mediator.Send(authorDto, token);
         return Results.Ok(author);
     }
-
-    // [HttpPut]
-    // [Route("/authors/update/{id:Guid}")]
-    // [Authorize(Policy = "Admin")]
-    // public async Task<IResult> UpdateAuthor([FromForm]Guid id, [FromBody] CreateAuthorDto authorDto)
-    // {
-    //     var newAuthor = await _authorService.UpdateAuthor(id, authorDto);
-    //     return Results.Ok(newAuthor);
-    // }
     
     [HttpDelete]
     [Route("/authors/delete/")]
@@ -78,23 +73,21 @@ public class AuthorController : Controller
         var author = await _mediator.Send(authorDto, token);
         return Results.Ok(author);
     }
-
+    
     [HttpGet]
-    [Route("/authors/{id:Guid}/books")]
-    public async Task<IResult> GetBooksByAuthor([FromRoute]Guid id)
+    [Route("/authors/books")]
+    public async Task<IResult> GetBooksByAuthor([FromQuery]GetAuthorBooksQuery query, CancellationToken token)
     {
-        var books = await _authorService.GetAuthorBooks(id);
+        var books = await _mediator.Send(query, token);
         return Results.Ok(books);
     }
     
     [HttpGet]
     [Route("/authors/list/")]
-    public async Task<IResult> GetPaginatedAuthors([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IResult> GetPaginatedAuthors([FromQuery] GetPaginatedAuthorsQuery query, CancellationToken token)
     {
-        var paginatedAuthors = await _authorService.GetPaginatedAuthors(page, pageSize);
+        var paginatedAuthors = await _mediator.Send(query, token);
         return Results.Ok(paginatedAuthors);
     }
-
-
 }
 
