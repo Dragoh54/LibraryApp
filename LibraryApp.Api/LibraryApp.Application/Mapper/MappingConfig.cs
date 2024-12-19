@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryApp.Application.Dto;
 using Mapster;
 using LibraryApp.DataAccess.Dto;
 
@@ -42,6 +43,12 @@ public class MappingConfig
             .Map(dest => dest.Books, src => src.Books.Select(book => book.Adapt<BookDto>()).ToList());
 
         TypeAdapterConfig<CreateAuthorDto, AuthorDto>.NewConfig()
+            .Map(dest => dest.Surname, src => src.Surname)
+            .Map(dest => dest.Country, src => src.Country)
+            .Map(dest => dest.BirthDate, src => src.BirthDate);
+        
+        TypeAdapterConfig<UpdateAuthorDto, AuthorDto>.NewConfig()
+            .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Surname, src => src.Surname)
             .Map(dest => dest.Country, src => src.Country)
             .Map(dest => dest.BirthDate, src => src.BirthDate);

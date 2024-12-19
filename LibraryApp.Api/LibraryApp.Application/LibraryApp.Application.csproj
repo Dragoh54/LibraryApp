@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Handlers\" />
-    <Folder Include="UseCases\Author\Command\UpdateAuthorCommand\" />
     <Folder Include="UseCases\Author\Querry\GetAllAuthorsCommand\" />
     <Folder Include="UseCases\Author\Querry\GetAuthorByIdCommand\" />
     <Folder Include="UseCases\Author\Querry\GetBooksByAuthorCommand\" />
