@@ -35,6 +35,13 @@ public class MappingConfig
             .Map(dest => dest.Description, src => src.Description)
             .Map(dest => dest.Genre, src => src.Genre);
 
+        TypeAdapterConfig<UpdateBookDto, BookDto>.NewConfig()
+            .Map(dest => dest.AuthorId, src => src.AuthorId)
+            .Map(dest => dest.Title, src => src.Title)
+            .Map(dest => dest.Description, src => src.Description)
+            .Map(dest => dest.Genre, src => src.Genre)
+            .Map(dest => dest.ISBN, src => src.ISBN);
+
         TypeAdapterConfig<AuthorDto, AuthorEntity>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Surname, src => src.Surname)

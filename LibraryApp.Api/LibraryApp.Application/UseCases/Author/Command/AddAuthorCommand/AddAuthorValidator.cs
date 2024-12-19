@@ -6,6 +6,5 @@ public class AddAuthorValidator : CreateAuthorDtoValidator<AddAuthorCommand>
 {
     public AddAuthorValidator() : base()
     {
-        
     }
 }

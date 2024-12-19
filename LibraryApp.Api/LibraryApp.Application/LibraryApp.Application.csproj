@@ -27,8 +27,10 @@
 
   <ItemGroup>
     <Folder Include="Handlers\" />
-    <Folder Include="UseCases\Book\Command\" />
-    <Folder Include="UseCases\Book\Querry\" />
+    <Folder Include="UseCases\Book\Querry\GetAllBooksQuery\" />
+    <Folder Include="UseCases\Book\Querry\GetBookByIdQuery\" />
+    <Folder Include="UseCases\Book\Querry\GetBookByIsbnQuery\" />
+    <Folder Include="UseCases\Book\Querry\GetPaginatedBooksQuery\" />
     <Folder Include="UseCases\User\Command\" />
     <Folder Include="UseCases\User\Querry\" />
   </ItemGroup>

@@ -1,15 +1,20 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Dto;
 using LibraryApp.DataAccess.Dto;
 
 namespace LibraryApp.Application.Validators;
 
-public class CreateBookDtoValidator : AbstractValidator<CreateBookDto>
+public class UpdateBookDtoValidator <T> : AbstractValidator<T> where T : UpdateBookDto
 {
-    public CreateBookDtoValidator()
+    public UpdateBookDtoValidator()
     {
         RuleFor(book => book)
             .NotNull()
             .WithMessage("The book object cannot be null.");
+        
+        RuleFor(author => author.Id)
+            .NotNull()
+            .WithMessage("Author object cannot be null.");
 
         RuleFor(book => book.ISBN)
             .NotEmpty()

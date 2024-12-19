@@ -1,6 +1,6 @@
 ﻿namespace LibraryApp.DataAccess.Dto;
 
-public class CreateBookDto
+public record CreateBookDto
 {
     public string ISBN { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.DataAccess.Dto;
 
-public class BookDto
+public record BookDto
 {
     public Guid Id { get; set; }
     public string ISBN { get; set; } = string.Empty;
