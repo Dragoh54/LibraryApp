@@ -37,11 +37,6 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<JwtOptions>(Configuration.GetSection(nameof(JwtOptions)));
-        
-        // services.AddControllersWithViews(options =>
-        // {
-        //     options.Filters.Add<ValidationFilter>();
-        // });
 
         services.AddControllersWithViews();
 
@@ -50,6 +45,8 @@ public class Startup
         services.AddDbContext<LibraryAppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("LibraryAppDbContext")));
         services.AddTransient<DataSeeder>();
+        
+        services.AddMediatRServices();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IUserRepository, UsersRepository>();
@@ -60,12 +57,9 @@ public class Startup
 
         services.AddScoped<UserService>();
         services.AddScoped<BookService>();
-        services.AddScoped<AuthorService>();
         
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
-        
-        services.AddMediatRServices();
         
         services.AddScoped<AllowAnonymousOnlyFilter>();
 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
+using LibraryApp.Application.Filters;
 using LibraryApp.DomainModel.Exceptions;
 using Microsoft.AspNetCore.Http;
 
@@ -140,14 +141,14 @@ public class BookService
         return true;
     }
 
-    public async Task<PaginatedPagedResult<BookDto>?> GetBooks(int page, int pageSize)
+    public async Task<PaginatedPagedResult<BookDto>?> GetBooks(BookFilters filters, int page, int pageSize)
     {
         if (page <= 0 || pageSize <= 0)
         {
             throw new ArgumentException("Page and pageSize must be greater than zero.");
         }
 
-        var (items, totalCount) = await _unitOfWork.BookRepository.GetBooks(page, pageSize);
+        var (items, totalCount) = await _unitOfWork.BookRepository.GetBooks(filters, page, pageSize);
 
         if (items is null)
         {

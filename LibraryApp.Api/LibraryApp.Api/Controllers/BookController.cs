@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using FluentValidation;
 using FluentValidation.Results;
+using LibraryApp.Application.Filters;
 using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.Dto;
 using LibraryApp.Entities.Models;
@@ -83,9 +84,9 @@ public class BookController : Controller
     
     [HttpGet]
     [Route("/books/list")]
-    public async Task<IResult> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IResult> GetBooks([FromQuery]BookFilters filters, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var paginatedBooks = await _bookService.GetBooks(page, pageSize);
+        var paginatedBooks = await _bookService.GetBooks(filters, page, pageSize);
         return Results.Ok(paginatedBooks);
     }
 }

@@ -22,13 +22,11 @@ namespace LibraryApp.Api.Controllers;
 [Authorize]
 public class AuthorController : Controller
 {
-    private readonly AuthorService _authorService;
     private readonly IMediator _mediator;
 
-    public AuthorController(AuthorService authorService, IMediator mediator)
+    public AuthorController(IMediator mediator)
     {
-        _authorService = authorService;
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _mediator = mediator;
     }
     
     [HttpGet]

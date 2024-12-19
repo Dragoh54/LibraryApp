@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.Interfaces.UnitOfWork;
+﻿using LibraryApp.Application.Filters;
+using LibraryApp.Application.Interfaces.UnitOfWork;
 using LibraryApp.DataAccess.Dto;
 using LibraryApp.DomainModel.Exceptions;
 using Mapster;
@@ -23,7 +24,7 @@ public class GetPaginatedAuthorsHandler : IRequestHandler<GetPaginatedAuthorsQue
         {
             throw new BadRequestException("Page and pageSize must be greater than zero.");
         }
-        var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(pageNumber, pageSize);
+        var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(request.Filters, pageNumber, pageSize);
         cancellationToken.ThrowIfCancellationRequested();
 
         if (items is null)

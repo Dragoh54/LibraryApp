@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryApp.Application.Filters;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryApp.DataAccess.Repositories;
 
@@ -32,17 +34,37 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
 
         return result.Books;
     }
-
-    public async Task<(List<AuthorEntity>?, int)> GetAuthors(int page, int pageSize)
+    
+    public async Task<(List<AuthorEntity>?, int)> GetAuthors(AuthorFilters filter, int page, int pageSize)
     {
-        var totalCount = await _dbContext.Authors.CountAsync();
-        var items = await _dbContext.Authors
+        var query = _dbContext.Authors
             .AsNoTracking()
-            .OrderBy(a => a.Surname)
+            .Where(a => filter.Surname.IsNullOrEmpty() || a.Surname.Contains(filter.Surname))
+            .Where(a => a.Country.Contains(filter.Country))
+            .Where(a => filter.DateOfBirth.IsNullOrEmpty() || a.BirthDate.Date == DateTime.Parse(filter.DateOfBirth).Date)
+            .AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(a => a.Surname) 
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
         return (items, totalCount);
     }
+
+    // public async Task<(List<AuthorEntity>?, int)> GetAuthors(int page, int pageSize)
+    // {
+    //     var totalCount = await _dbContext.Authors.CountAsync();
+    //     var items = await _dbContext.Authors
+    //         .AsNoTracking()
+    //         .OrderBy(a => a.Surname)
+    //         .Skip((page - 1) * pageSize)
+    //         .Take(pageSize)
+    //         .ToListAsync();
+    //
+    //     return (items, totalCount);
+    // }
 }
