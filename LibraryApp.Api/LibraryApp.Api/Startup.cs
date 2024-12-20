@@ -3,7 +3,6 @@ using FluentValidation;
 using LibraryApp.Application.Interfaces.Auth;
 using LibraryApp.Application.Interfaces.Repositories;
 using LibraryApp.Application.Interfaces.UnitOfWork;
-using LibraryApp.Application.Services;
 using LibraryApp.DataAccess.DataSeeder;
 using LibraryApp.DataAccess.Jwt;
 using LibraryApp.DataAccess.Repositories;
@@ -54,8 +53,6 @@ public class Startup
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        services.AddScoped<UserService>();
         
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

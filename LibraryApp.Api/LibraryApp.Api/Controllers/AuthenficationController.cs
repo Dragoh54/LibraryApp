@@ -1,10 +1,14 @@
 ﻿using Azure.Core;
 using FluentValidation;
 using LibraryApp.Api.Filters;
-using LibraryApp.Application.Services;
+using LibraryApp.Application.UseCases.User.Command.LoginCommand;
+using LibraryApp.Application.UseCases.User.Command.LogoutCommand;
+using LibraryApp.Application.UseCases.User.Command.RefreshCommand;
+using LibraryApp.Application.UseCases.User.Command.RegisterCommand;
 using LibraryApp.Application.User;
 using LibraryApp.DataAccess.Jwt;
 using LibraryApp.DomainModel.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,20 +20,20 @@ namespace LibraryApp.Api.Controllers;
 [Route("[controller]")]
 public class AuthenficationController : Controller
 {
-    private readonly UserService _userService;
     private readonly JwtOptions _jwtOptions;
+    private readonly IMediator _mediator;
 
-    public AuthenficationController(UserService userService, IOptions<JwtOptions> jwtOptions)
+    public AuthenficationController(IMediator mediator, IOptions<JwtOptions> jwtOptions)
     {
-        _userService = userService;
+        _mediator = mediator;
         _jwtOptions = jwtOptions.Value;
     }
-
+    
     [HttpPost("/login")]
     [ServiceFilter(typeof(AllowAnonymousOnlyFilter))]
-    public async Task<IResult> Login(LoginUserDto dto)
+    public async Task<IResult> Login(LoginCommand user, CancellationToken cancellationToken)
     {
-        var (token, refreshToken) = await _userService.Login(dto.Email, dto.Password);
+        var (token, refreshToken) = await _mediator.Send(user, cancellationToken);
         
         HttpContext.Response.Cookies.Append("tasty-cookies", token, new CookieOptions()
         {
@@ -48,27 +52,27 @@ public class AuthenficationController : Controller
 
         return Results.Ok();
     }
-
+    
     [HttpPost("/register")]
-    public async Task<IResult> Register(RegisterLoginUserDto dto)
+    public async Task<IResult> Register(RegisterCommand user, CancellationToken cancellationToken)
     {
-        await _userService.Register(dto.Nickname, dto.Email, dto.Password);
-        return Results.Ok();
+        var resultUser = await _mediator.Send(user, cancellationToken);
+        return Results.Ok(resultUser);
     }
-
+    
     [HttpPost("/logout")]
     [Authorize]
-    public async Task<IResult> Logout()
+    public async Task<IResult> Logout(CancellationToken cancellationToken)
     {
-        await _userService.Logout(HttpContext);
-        return Results.Ok();
+        var success = await _mediator.Send(new LogoutCommand(HttpContext), cancellationToken);
+        return Results.Ok(success);
     }
-
+    
     [HttpPost("/refresh")]
     [AllowAnonymous]
-    public async Task<IResult> Refresh()
+    public async Task<IResult> Refresh(CancellationToken cancellationToken)
     {
-        var token = await _userService.Refresh(HttpContext);
+        var token =await _mediator.Send(new RefreshCommand(HttpContext), cancellationToken);
         
         HttpContext.Response.Cookies.Append("tasty-cookies", token, new CookieOptions()
         {

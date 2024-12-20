@@ -2,7 +2,6 @@
 using FluentValidation;
 using FluentValidation.Results;
 using LibraryApp.Application.Filters;
-using LibraryApp.Application.Services;
 using LibraryApp.Application.UseCases.Book.Command.AddBookCommand;
 using LibraryApp.Application.UseCases.Book.Command.DeleteBookCommand;
 using LibraryApp.Application.UseCases.Book.Command.TakeBookCommand;
