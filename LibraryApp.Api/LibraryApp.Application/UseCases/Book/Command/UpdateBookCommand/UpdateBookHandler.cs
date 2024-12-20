@@ -18,7 +18,7 @@ public class UpdateBookHandler : IRequestHandler<UpdateBookCommand, BookDto>
     
     public async Task<BookDto> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        _ = await _unitOfWork.AuthorRepository.Get(request.Id) ?? 
+        _ = await _unitOfWork.BookRepository.Get(request.Id) ?? 
             throw new NotFoundException("Book with this id doesn't exist");
         
         cancellationToken.ThrowIfCancellationRequested();

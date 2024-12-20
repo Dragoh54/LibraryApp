@@ -34,7 +34,7 @@ public class AddBookHandler : IRequestHandler<AddBookCommand, BookDto>
             throw new NotFoundException("This book author doesn't exist.");
         }
 
-        var book = tempBook.Adapt<BookDto>();
+        var book = request.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
         await _unitOfWork.BookRepository.SaveAsync();

@@ -5,14 +5,20 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Book.Querry.GetPaginatedBooksQuery;
 
-public record GetPaginatedBooksQuery : PaginatedResultDto<BookFilters>, IRequest<PaginatedPagedResult<BookDto>>
+public record GetPaginatedBooksQuery : IRequest<PaginatedPagedResult<BookDto>>
 {
+    public BookFilters Filters { get; set; } = new BookFilters();
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+    
     public GetPaginatedBooksQuery()
     {
     }
 
-    public GetPaginatedBooksQuery(BookFilters filters, int pageNumber, int pageSize)
-        : base(filters, pageNumber, pageSize)
+    public GetPaginatedBooksQuery(BookFilters filters, int pageNumber = 1, int pageSize = 10)
     {
+        Filters = filters;
+        PageNumber = pageNumber;
+        PageSize = pageSize;
     }
 }

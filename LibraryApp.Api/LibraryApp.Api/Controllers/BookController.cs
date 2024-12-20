@@ -3,8 +3,17 @@ using FluentValidation;
 using FluentValidation.Results;
 using LibraryApp.Application.Filters;
 using LibraryApp.Application.Services;
+using LibraryApp.Application.UseCases.Book.Command.AddBookCommand;
+using LibraryApp.Application.UseCases.Book.Command.DeleteBookCommand;
+using LibraryApp.Application.UseCases.Book.Command.TakeBookCommand;
+using LibraryApp.Application.UseCases.Book.Command.UpdateBookCommand;
+using LibraryApp.Application.UseCases.Book.Querry.GetAllBooksQuery;
+using LibraryApp.Application.UseCases.Book.Querry.GetBookByIdQuery;
+using LibraryApp.Application.UseCases.Book.Querry.GetBookByIsbnQuery;
+using LibraryApp.Application.UseCases.Book.Querry.GetPaginatedBooksQuery;
 using LibraryApp.DataAccess.Dto;
 using LibraryApp.Entities.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,78 +24,78 @@ namespace LibraryApp.Api.Controllers;
 [Authorize]
 public class BookController : Controller
 {
-    private readonly BookService _bookService;
+    private readonly IMediator _mediator;
 
-    public BookController(BookService bookService, IValidator<CreateBookDto> validator)
+    public BookController(IMediator mediator)
     {
-        _bookService = bookService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    [Route("/books")]
-    public async Task<IResult> GetAllBooks()
+    [Route("/books/all")]
+    public async Task<IResult> GetAllBooks(CancellationToken cancellationToken)
     {
-        var books = await _bookService.GetAllBooks();
+        var books = await _mediator.Send(new GetAllBooksQuery(), cancellationToken);
         return Results.Ok(books);
     }
 
     [HttpGet]
-    [Route("/books/{id:Guid}")]
-    public async Task<IResult> GetBookById([FromRoute]Guid id)
+    [Route("/books/")]
+    public async Task<IResult> GetBookById([FromQuery]GetBookByIdQuery query, CancellationToken cancellationToken)
     {
-        var book = await _bookService.GetBookById(id);
+        var book = await _mediator.Send(query, cancellationToken);
         return Results.Ok(book);
     }
 
     [HttpGet]
-    [Route("/books/isbn/{isbn}")]
-    public async Task<IResult> GetBookByIsbn([FromRoute]string isbn)
+    [Route("/books/isbn/")]
+    public async Task<IResult> GetBookByIsbn([FromQuery]GetBookByIsbnQuery query, CancellationToken cancellationToken)
     {
-        var book = await _bookService.GetBookByIsbn(isbn);
+        var book = await _mediator.Send(query, cancellationToken);
         return Results.Ok(book);
     }
 
     [HttpPost]
     [Route("/books/add")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> AddBook([FromBody] CreateBookDto bookDto)
+    public async Task<IResult> AddBook([FromBody] AddBookCommand bookDto, CancellationToken token)
     {
-        var book = await _bookService.AddBook(bookDto);
+        var book = await _mediator.Send(bookDto, token);
         return Results.Ok(book);
     }
 
     [HttpDelete]
-    [Route("/books/delete/{id:Guid}")]
+    [Route("/books/delete/")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> DeleteBook([FromRoute]Guid id)
+    public async Task<IResult> DeleteBook([FromQuery] DeleteBookCommand bookDto, CancellationToken token)
     {
-        var deletedBook = await _bookService.DeleteBook(id);
-        return Results.Ok(deletedBook);
+        var book = await _mediator.Send(bookDto, token);
+        return Results.Ok(book);
     }
 
     [HttpPut]
-    [Route("/books/update/{id:Guid}")]
+    [Route("/books/update/")]
     [Authorize(Policy = "Admin")]
-    public async Task<IResult> UpdateBook([FromRoute]Guid id, [FromBody] CreateBookDto bookDto)
+    public async Task<IResult> UpdateBook([FromForm]UpdateBookCommand bookDto, CancellationToken token)
     {
-        var updatedBook = await _bookService.UpdateBook(id, bookDto);
-        return Results.Ok(updatedBook);
+        var book = await _mediator.Send(bookDto, token);
+        return Results.Ok(book);
     }
 
     [HttpPost]
-    [Route("/books/{bookId:Guid}/take")]
-    public async Task<IResult> TakeBook([FromRoute]Guid bookId)
+    [Route("/books/take")]
+    public async Task<IResult> TakeBook([FromQuery] TakeBookCommand bookDto, CancellationToken token)
     {
-        string? userIdClaim = User.FindFirst("Id")?.Value;
-        var success = await _bookService.TakeBook(bookId, userIdClaim);
+        bookDto.UserClaimId = User.FindFirst("Id")?.Value;
+        var success = await _mediator.Send(bookDto, token);
         return Results.Ok(success);
     }
     
     [HttpGet]
     [Route("/books/list")]
-    public async Task<IResult> GetBooks([FromQuery]BookFilters filters, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IResult> GetBooks([FromQuery] GetPaginatedBooksQuery query, CancellationToken token)
     {
-        var paginatedBooks = await _bookService.GetBooks(filters, page, pageSize);
+        var paginatedBooks = await _mediator.Send(query, token);
         return Results.Ok(paginatedBooks);
     }
 }

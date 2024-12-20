@@ -9,7 +9,7 @@ public record TakeBookCommand : TakeBookDto, IRequest<bool>
     {
     }
 
-    public TakeBookCommand(Guid id, string userClaimId)
+    public TakeBookCommand(Guid id, string? userClaimId)
     {
         Id = id;
         UserClaimId = userClaimId;
