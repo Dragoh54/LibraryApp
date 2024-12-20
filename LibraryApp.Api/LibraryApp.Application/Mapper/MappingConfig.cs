@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibraryApp.Application.Dto;
+using LibraryApp.Application.User;
 using Mapster;
 using LibraryApp.DataAccess.Dto;
 
@@ -15,6 +16,11 @@ public class MappingConfig
     public static void RegisterMappings()
     {
         TypeAdapterConfig<UserDto, UserEntity>.NewConfig()
+            .Map(dest => dest.Nickname, src => src.Nickname)
+            .Map(dest => dest.Email, src => src.Email)
+            .Map(dest => dest.Role, src => src.Role);
+        
+        TypeAdapterConfig<UserEntity, UserDto>.NewConfig()
             .Map(dest => dest.Nickname, src => src.Nickname)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.Role, src => src.Role);

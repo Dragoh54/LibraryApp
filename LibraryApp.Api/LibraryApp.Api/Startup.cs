@@ -56,7 +56,6 @@ public class Startup
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<UserService>();
-        services.AddScoped<BookService>();
         
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

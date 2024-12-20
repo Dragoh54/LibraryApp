@@ -50,7 +50,7 @@ public class AuthenficationController : Controller
     }
 
     [HttpPost("/register")]
-    public async Task<IResult> Register(RegisterUserDto dto)
+    public async Task<IResult> Register(RegisterLoginUserDto dto)
     {
         await _userService.Register(dto.Nickname, dto.Email, dto.Password);
         return Results.Ok();

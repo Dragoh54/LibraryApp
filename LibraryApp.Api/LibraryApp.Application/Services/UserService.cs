@@ -101,8 +101,6 @@ public class UserService
         httpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");
     }
     
-    //TODO: ADD CONSTANTS
-    //TODO: REMOVE VAR
     public async Task<string> Refresh(HttpContext httpContext)
     {
         var refreshToken = httpContext.Request.Cookies["not-a-refresh-token-cookies"];
