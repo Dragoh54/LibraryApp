@@ -20,10 +20,6 @@ public class LibraryAppDbContext(DbContextOptions<LibraryAppDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryAppDbContext).Assembly);
-        new AuthorConfiguration().Configure(modelBuilder.Entity<AuthorEntity>());
-        new BookConfiguration().Configure(modelBuilder.Entity<BookEntity>());
-        new UserConfiguration().Configure(modelBuilder.Entity<UserEntity>());
-        new RefreshTokenConfiguration().Configure(modelBuilder.Entity<RefreshToken>());
 
         base.OnModelCreating(modelBuilder);
     }
