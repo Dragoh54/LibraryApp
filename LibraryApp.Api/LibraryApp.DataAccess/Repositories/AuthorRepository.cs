@@ -27,12 +27,12 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
         .Include(a => a.Books)
         .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (result is null)
-        {
-            throw new Exception("Author with this id doesn't exist");
-        }
+        // if (result is null)
+        // {
+        //     throw new Exception("Author with this id doesn't exist");
+        // }
 
-        return result.Books;
+        return result?.Books;
     }
     
     public async Task<(List<AuthorEntity>?, int)> GetAuthors(AuthorFilters filter, int page, int pageSize)
@@ -54,17 +54,4 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
 
         return (items, totalCount);
     }
-
-    // public async Task<(List<AuthorEntity>?, int)> GetAuthors(int page, int pageSize)
-    // {
-    //     var totalCount = await _dbContext.Authors.CountAsync();
-    //     var items = await _dbContext.Authors
-    //         .AsNoTracking()
-    //         .OrderBy(a => a.Surname)
-    //         .Skip((page - 1) * pageSize)
-    //         .Take(pageSize)
-    //         .ToListAsync();
-    //
-    //     return (items, totalCount);
-    // }
 }
