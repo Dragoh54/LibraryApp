@@ -32,7 +32,7 @@ public class UpdateBookHandler : IRequestHandler<UpdateBookCommand, BookDto>
         var updatedBook = request.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Update(updatedBook.Adapt<BookEntity>());
-        await _unitOfWork.BookRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
         return updatedBook;

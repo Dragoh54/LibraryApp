@@ -37,7 +37,7 @@ public class AddBookHandler : IRequestHandler<AddBookCommand, BookDto>
         var book = request.Adapt<BookDto>();
 
         await _unitOfWork.BookRepository.Add(book.Adapt<BookEntity>());
-        await _unitOfWork.BookRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();
         return book;

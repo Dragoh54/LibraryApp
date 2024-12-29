@@ -35,7 +35,7 @@ public class TakeBookHandler : IRequestHandler<TakeBookCommand, bool>
         book.UserId = userId;
 
         await _unitOfWork.BookRepository.Update(book);
-        await _unitOfWork.BookRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();
         return true;

@@ -49,6 +49,11 @@ public class UnitOfWork : IUnitOfWork
     {
         _dbContext.SaveChanges();
     }
+    
+    public async Task SaveChangesAsync()
+    {
+        await _dbContext.SaveChangesAsync();
+    }
 
     public void Dispose()
     {

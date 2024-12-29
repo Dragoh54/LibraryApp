@@ -37,7 +37,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
         var user = new UserEntity(Guid.NewGuid(), request.Nickname, request.Email, hashedPassword, Role.User);
 
         await _unitOfWork.UserRepository.Add(user);
-        await _unitOfWork.UserRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
         return user.Adapt<UserDto>();

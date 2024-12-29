@@ -7,6 +7,10 @@ public class IdModelValidator<T> : AbstractValidator<T> where T : IdModel
 {
     public IdModelValidator()
     {
+        RuleFor(x => x)
+            .NotNull()
+            .WithMessage("Id model is required");
+        
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("Id is required.")

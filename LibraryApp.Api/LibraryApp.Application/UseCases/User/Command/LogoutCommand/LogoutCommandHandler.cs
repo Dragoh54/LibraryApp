@@ -40,7 +40,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, bool>
         refreshToken.WhenUsed = DateTime.UtcNow;
 
         await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
-        await _unitOfWork.RefreshTokenRepository.SaveAsync(); 
+        await _unitOfWork.SaveChangesAsync();
         
         request.HttpContext.Response.Cookies.Delete("tasty-cookies");
         request.HttpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");

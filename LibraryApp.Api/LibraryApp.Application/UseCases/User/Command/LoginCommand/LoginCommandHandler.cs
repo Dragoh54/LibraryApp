@@ -44,7 +44,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, (string, string
         }
         
         await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
-        await _unitOfWork.RefreshTokenRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();
         return (token, refreshToken.Id.ToString());

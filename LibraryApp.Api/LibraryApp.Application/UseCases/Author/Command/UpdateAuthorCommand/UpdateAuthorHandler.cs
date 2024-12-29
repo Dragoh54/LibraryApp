@@ -24,7 +24,7 @@ public class UpdateAuthorHandler : IRequestHandler<UpdateAuthorCommand, AuthorDt
         var updatedAuthor = request.Adapt<AuthorDto>();
         
         await _unitOfWork.AuthorRepository.Update(updatedAuthor.Adapt<AuthorEntity>());
-        await _unitOfWork.AuthorRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
         return updatedAuthor;

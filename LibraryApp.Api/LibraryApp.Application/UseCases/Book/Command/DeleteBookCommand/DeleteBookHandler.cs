@@ -26,7 +26,7 @@ public class DeleteBookHandler: IRequestHandler<DeleteBookCommand, BookDto>
         }
         
         await _unitOfWork.BookRepository.Delete(book);
-        await _unitOfWork.BookRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();
         return book.Adapt<BookDto>();

@@ -14,4 +14,5 @@ public interface IUnitOfWork : IDisposable
     IAuthorRepository AuthorRepository { get; }
     IBookRepository BookRepository { get; }
     IRefreshTokenRepository RefreshTokenRepository { get; }
+    Task SaveChangesAsync();
 }

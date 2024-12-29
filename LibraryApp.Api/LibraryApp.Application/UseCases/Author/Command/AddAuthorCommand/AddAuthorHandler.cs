@@ -20,7 +20,7 @@ public class AddAuthorHandler : IRequestHandler<AddAuthorCommand, AuthorDto>
         cancellationToken.ThrowIfCancellationRequested();
         var author = request.Adapt<AuthorDto>(); 
         await _unitOfWork.AuthorRepository.Add(author.Adapt<AuthorEntity>());
-        await _unitOfWork.AuthorRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return author;
     }

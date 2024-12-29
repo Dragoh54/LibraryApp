@@ -25,7 +25,7 @@ public class DeleteAuthorHandler : IRequestHandler<DeleteAuthorCommand, AuthorDt
         }
         
         await _unitOfWork.AuthorRepository.Delete(author);
-        await _unitOfWork.AuthorRepository.SaveAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
         
