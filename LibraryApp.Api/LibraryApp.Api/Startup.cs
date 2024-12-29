@@ -19,6 +19,7 @@ using LibraryApp.Api.Requirements;
 using LibraryApp.Application.Extensions;
 using LibraryApp.Application.Validators;
 using LibraryApp.DataAccess.Dto;
+using LibraryApp.DataAccess.Extensions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -46,16 +47,11 @@ public class Startup
         services.AddTransient<DataSeeder>();
         
         services.AddMediatRServices();
-
-        services.AddScoped<IAuthorRepository, AuthorRepository>();
-        services.AddScoped<IUserRepository, UsersRepository>();
-        services.AddScoped<IBookRepository, BookRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddRepositories();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
-        services.AddScoped<IJwtProvider, JwtProvider>();
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddJwt();
         
         services.AddScoped<AllowAnonymousOnlyFilter>();
 
@@ -95,15 +91,15 @@ public class Startup
             endpoints.MapControllers();
         });
         
-        if (args.Contains("--seed"))
-        {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<LibraryAppDbContext>();
-                dbContext.Database.Migrate();
-                var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-                seeder.Seed();
-            }
-        }
+        // if (args.Contains("--seed"))
+        // {
+        //     using (var scope = app.ApplicationServices.CreateScope())
+        //     {
+        //         var dbContext = scope.ServiceProvider.GetRequiredService<LibraryAppDbContext>();
+        //         dbContext.Database.Migrate();
+        //         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+        //         seeder.Seed();
+        //     }
+        // }
     }
 }
