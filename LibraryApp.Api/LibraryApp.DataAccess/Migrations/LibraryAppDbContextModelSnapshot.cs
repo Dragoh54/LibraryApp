@@ -51,35 +51,35 @@ namespace LibraryApp.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("baca402e-d45d-461a-bd80-4661057bcc7a"),
+                            Id = new Guid("3c1d5a5e-8bdd-4ed5-896b-4d3ab5824fbe"),
                             BirthDate = new DateTime(1892, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
                             Country = "United Kingdom",
                             Surname = "Tolkien"
                         },
                         new
                         {
-                            Id = new Guid("eda3a697-7301-4a55-898c-abdf7419e9e8"),
+                            Id = new Guid("6e676b9f-1245-4e2d-8af0-780db78c5a8c"),
                             BirthDate = new DateTime(1965, 7, 31, 0, 0, 0, 0, DateTimeKind.Utc),
                             Country = "United Kingdom",
                             Surname = "Rowling"
                         },
                         new
                         {
-                            Id = new Guid("41030ea2-ab9c-417e-a926-59e4b0f895de"),
+                            Id = new Guid("e74425ce-b470-412d-88ed-09400af22d41"),
                             BirthDate = new DateTime(1948, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             Country = "United States",
                             Surname = "Martin"
                         },
                         new
                         {
-                            Id = new Guid("ce968f77-3e8f-46f7-a500-2c665e470718"),
+                            Id = new Guid("fc89e677-a517-415d-a27c-f89b0389703d"),
                             BirthDate = new DateTime(1903, 6, 25, 0, 0, 0, 0, DateTimeKind.Utc),
                             Country = "United Kingdom",
                             Surname = "Orwell"
                         },
                         new
                         {
-                            Id = new Guid("2131a841-f799-4f91-abef-6790014f5b66"),
+                            Id = new Guid("a2846d86-be0d-4732-938f-c6541cf95838"),
                             BirthDate = new DateTime(1775, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc),
                             Country = "United Kingdom",
                             Surname = "Austen"
@@ -138,44 +138,44 @@ namespace LibraryApp.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7d05602-f3cf-41f5-953f-1f80ca913b6a"),
-                            AuthorId = new Guid("baca402e-d45d-461a-bd80-4661057bcc7a"),
+                            Id = new Guid("675a623f-3f61-4918-9d81-76fbadcf312d"),
+                            AuthorId = new Guid("3c1d5a5e-8bdd-4ed5-896b-4d3ab5824fbe"),
                             Description = "A fantasy novel by J.R.R. Tolkien.",
                             Genre = "Fantasy",
                             ISBN = "978-0261103573",
-                            ReturnBy = new DateTime(2025, 1, 18, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8069),
-                            TakenAt = new DateTime(2024, 12, 19, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8065),
+                            ReturnBy = new DateTime(2025, 1, 18, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8473),
+                            TakenAt = new DateTime(2024, 12, 19, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8469),
                             Title = "The Hobbit",
-                            UserId = new Guid("7f77794a-1409-4281-abea-7ba9995a6c07")
+                            UserId = new Guid("1e6520ca-897e-47dd-a74e-e7203f436fa0")
                         },
                         new
                         {
-                            Id = new Guid("ad4e9ec3-adaf-46d9-9c00-6ce7911cd786"),
-                            AuthorId = new Guid("eda3a697-7301-4a55-898c-abdf7419e9e8"),
+                            Id = new Guid("6b5ea3bf-f232-4aad-8a9a-5284b818ff2f"),
+                            AuthorId = new Guid("6e676b9f-1245-4e2d-8af0-780db78c5a8c"),
                             Description = "The first book in the Harry Potter series by J.K. Rowling.",
                             Genre = "Fantasy",
                             ISBN = "978-0747532743",
-                            ReturnBy = new DateTime(2025, 1, 13, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8076),
-                            TakenAt = new DateTime(2024, 12, 24, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8075),
+                            ReturnBy = new DateTime(2025, 1, 13, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8478),
+                            TakenAt = new DateTime(2024, 12, 24, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8478),
                             Title = "Harry Potter and the Philosopher's Stone",
-                            UserId = new Guid("7f77794a-1409-4281-abea-7ba9995a6c07")
+                            UserId = new Guid("1e6520ca-897e-47dd-a74e-e7203f436fa0")
                         },
                         new
                         {
-                            Id = new Guid("1423397e-3ca8-4164-b479-ae1fec105185"),
-                            AuthorId = new Guid("41030ea2-ab9c-417e-a926-59e4b0f895de"),
+                            Id = new Guid("6881d1ce-5541-4b84-ab19-80a02a91c70c"),
+                            AuthorId = new Guid("e74425ce-b470-412d-88ed-09400af22d41"),
                             Description = "The first book in the A Song of Ice and Fire series by George R.R. Martin.",
                             Genre = "Fantasy",
                             ISBN = "978-0553103540",
-                            ReturnBy = new DateTime(2025, 1, 3, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8111),
-                            TakenAt = new DateTime(2024, 12, 9, 22, 37, 50, 260, DateTimeKind.Utc).AddTicks(8110),
+                            ReturnBy = new DateTime(2025, 1, 3, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8526),
+                            TakenAt = new DateTime(2024, 12, 9, 23, 5, 22, 422, DateTimeKind.Utc).AddTicks(8525),
                             Title = "A Game of Thrones",
-                            UserId = new Guid("91aabcf3-662b-41e1-a6ed-312496c55940")
+                            UserId = new Guid("2541e981-fdcc-4743-a6c2-0bf54cda6537")
                         },
                         new
                         {
-                            Id = new Guid("658b45b5-f562-4760-b26a-20fc95ba744a"),
-                            AuthorId = new Guid("ce968f77-3e8f-46f7-a500-2c665e470718"),
+                            Id = new Guid("8d681569-4465-4e72-82a1-1f15fccd1c2c"),
+                            AuthorId = new Guid("fc89e677-a517-415d-a27c-f89b0389703d"),
                             Description = "A dystopian novel by George Orwell.",
                             Genre = "Dystopian",
                             ISBN = "978-0451524935",
@@ -185,8 +185,8 @@ namespace LibraryApp.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("373ccaf8-9151-4a40-9657-647eb0ab7e13"),
-                            AuthorId = new Guid("2131a841-f799-4f91-abef-6790014f5b66"),
+                            Id = new Guid("569fef52-d157-4a17-be86-5ff7e80b4d3e"),
+                            AuthorId = new Guid("a2846d86-be0d-4732-938f-c6541cf95838"),
                             Description = "A classic novel by Jane Austen.",
                             Genre = "Classic",
                             ISBN = "978-0141439518",
@@ -196,8 +196,8 @@ namespace LibraryApp.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("dba2fcaa-7302-497a-a3cc-c5efbb6f2ae9"),
-                            AuthorId = new Guid("baca402e-d45d-461a-bd80-4661057bcc7a"),
+                            Id = new Guid("066d6761-cfbe-45d5-8fca-9f5c7119f1b8"),
+                            AuthorId = new Guid("3c1d5a5e-8bdd-4ed5-896b-4d3ab5824fbe"),
                             Description = "An epic high-fantasy novel by J.R.R. Tolkien.",
                             Genre = "Fantasy",
                             ISBN = "978-0261102385",
@@ -207,8 +207,8 @@ namespace LibraryApp.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e4a8e749-7e9c-4637-977c-add712f999db"),
-                            AuthorId = new Guid("eda3a697-7301-4a55-898c-abdf7419e9e8"),
+                            Id = new Guid("00bf7bcc-fdfb-4292-86ef-49f335bcc3c4"),
+                            AuthorId = new Guid("6e676b9f-1245-4e2d-8af0-780db78c5a8c"),
                             Description = "The sixth book in the Harry Potter series by J.K. Rowling.",
                             Genre = "Fantasy",
                             ISBN = "978-0747581086",
@@ -274,42 +274,42 @@ namespace LibraryApp.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7f77794a-1409-4281-abea-7ba9995a6c07"),
+                            Id = new Guid("1e6520ca-897e-47dd-a74e-e7203f436fa0"),
                             Email = "booklover123@example.com",
                             Nickname = "booklover123",
-                            PasswordHash = "$2a$11$OU0YC58MwgjsyeJkx9MzDOTzFvxNJAaCVmwxfzFta3m4ZkSR/Jili",
+                            PasswordHash = "$2a$11$II0LkJcm6/ct81LosKntfOsUWaD2k7PwOZo3VNBeKiu543gxzbQ5.",
                             Role = 1
                         },
                         new
                         {
-                            Id = new Guid("dd47b691-3910-48a7-b76d-f67602195752"),
+                            Id = new Guid("19936275-2f47-4dae-a6f2-0890b217f362"),
                             Email = "admin@example.com",
                             Nickname = "adminuser",
-                            PasswordHash = "$2a$11$rYWcqxJlCbKbMcSRhwB1..um354tOhZ3mRetzXj43tLyj6AU97uoO",
+                            PasswordHash = "$2a$11$E.jEY9H59mOuNkmukl38IOVZL0XXnRL5J6rrEJQR5QAy9GGKPjD3y",
                             Role = 2
                         },
                         new
                         {
-                            Id = new Guid("91aabcf3-662b-41e1-a6ed-312496c55940"),
+                            Id = new Guid("2541e981-fdcc-4743-a6c2-0bf54cda6537"),
                             Email = "fan@example.com",
                             Nickname = "literaturefan",
-                            PasswordHash = "$2a$11$MMAXtpHuGJw0Opl2N8Ws7.vPzTYRf2Dptjc1U8zrpdlWNzJJTZoYy",
+                            PasswordHash = "$2a$11$qNm0y8uaRUH4.gOzrkM1/OdDTIbscB/IUBnmX6VsqfqsZO9EKYPYi",
                             Role = 1
                         },
                         new
                         {
-                            Id = new Guid("38a861d3-919e-4934-a6f0-27e28fb1fff4"),
+                            Id = new Guid("ada323cc-22ad-4197-bd32-1b4a598bee47"),
                             Email = "historybuff@example.com",
                             Nickname = "historybuff",
-                            PasswordHash = "$2a$11$JVf9op3AIrqSFW8Jw3i2GuTAN7prWd3mjKiqj8nZl3B7RTmBduRO6",
+                            PasswordHash = "$2a$11$O4PYdy5jydcUs1LWBjnSiu8ztQp.7BK23NLORsIhThN87aXmGWgmS",
                             Role = 1
                         },
                         new
                         {
-                            Id = new Guid("3fb45498-0311-4ed6-85be-333656ed177a"),
+                            Id = new Guid("a50471dc-9808-48f6-ae80-50731ff70e01"),
                             Email = "sciencegeek@example.com",
                             Nickname = "sciencegeek",
-                            PasswordHash = "$2a$11$x8GcliIGZ63TvuCKS.iPgeXsXwhIp0Q9uaXpA8FPhsfhlKtfft.s.",
+                            PasswordHash = "$2a$11$t9xdEu0peUQe/rJd69215O7Dv4U9qqljehGtK8gKFHY9yc.tfFiDC",
                             Role = 1
                         });
                 });

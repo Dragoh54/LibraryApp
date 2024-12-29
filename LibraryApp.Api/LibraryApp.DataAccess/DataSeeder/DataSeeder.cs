@@ -12,54 +12,11 @@ namespace LibraryApp.DataAccess.DataSeeder;
 
 public static class DataSeeder
 {
-    // public readonly LibraryAppDbContext _dbContext;
-    private static readonly PasswordHasher PasswordHasher = new PasswordHasher();
-    //
-    // public DataSeeder(LibraryAppDbContext dbContext)
-    // {
-    //     _dbContext = dbContext;
-    // }
-    //
-    // public void Seed()
-    // {
-    //     var users = GenerateUsers();
-    //     var authors = GenerateAuthors();
-    //     var books = GenerateBooks(authors, users);
-    //     
-    //     SeedUsers(users);
-    //     SeedAuthors(authors);
-    //     SeedBooks(books);
-    // }
-
-    // private void SeedUsers(List<UserEntity> users)
-    // {
-    //     if (!_dbContext.Users.Any())
-    //     {
-    //         _dbContext.Users.AddRange(users);
-    //         _dbContext.SaveChanges();
-    //     }
-    // }
-
-    // private void SeedAuthors(List<AuthorEntity> authors)
-    // {
-    //     if (!_dbContext.Authors.Any())
-    //     {
-    //         _dbContext.Authors.AddRange(authors);
-    //         _dbContext.SaveChanges();
-    //     }
-    // }
-
-    // private void SeedBooks(List<BookEntity> books)
-    // {
-    //     if (!_dbContext.Books.Any())
-    //     {
-    //         _dbContext.Books.AddRange(books);
-    //         _dbContext.SaveChanges();
-    //     }
-    // }
 
     public static List<UserEntity> GenerateUsers()
     {
+        PasswordHasher ph = new PasswordHasher();
+        
         return new List<UserEntity>
         {
             new UserEntity
@@ -67,7 +24,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "booklover123",
                 Email = "booklover123@example.com",
-                PasswordHash = PasswordHasher.Generate("hashedpassword1"),
+                PasswordHash = ph.Generate("hashedpassword1"),
                 Role = Role.User
             },
             new UserEntity
@@ -75,7 +32,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "adminuser",
                 Email = "admin@example.com",
-                PasswordHash = PasswordHasher.Generate("hashedpassword2"),
+                PasswordHash = ph.Generate("hashedpassword2"),
                 Role = Role.Admin
             },
             new UserEntity
@@ -83,7 +40,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "literaturefan",
                 Email = "fan@example.com",
-                PasswordHash = PasswordHasher.Generate("hashedpassword3"),
+                PasswordHash = ph.Generate("hashedpassword3"),
                 Role = Role.User
             },
             new UserEntity
@@ -91,7 +48,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "historybuff",
                 Email = "historybuff@example.com",
-                PasswordHash = PasswordHasher.Generate("hashedpassword4"),
+                PasswordHash = ph.Generate("hashedpassword4"),
                 Role = Role.User
             },
             new UserEntity
@@ -99,7 +56,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "sciencegeek",
                 Email = "sciencegeek@example.com",
-                PasswordHash = PasswordHasher.Generate("hashedpassword5"),
+                PasswordHash = ph.Generate("hashedpassword5"),
                 Role = Role.User
             }
         };
