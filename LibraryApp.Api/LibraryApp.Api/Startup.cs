@@ -44,7 +44,6 @@ public class Startup
 
         services.AddDbContext<LibraryAppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("LibraryAppDbContext")));
-        //services.AddTransient<DataSeeder>();
         
         services.AddMediatRServices();
         services.AddRepositories();
@@ -90,16 +89,5 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-        
-        // if (args.Contains("--seed"))
-        // {
-        //     using (var scope = app.ApplicationServices.CreateScope())
-        //     {
-        //         var dbContext = scope.ServiceProvider.GetRequiredService<LibraryAppDbContext>();
-        //         dbContext.Database.Migrate();
-        //         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-        //         seeder.Seed();
-        //     }
-        // }
     }
 }
