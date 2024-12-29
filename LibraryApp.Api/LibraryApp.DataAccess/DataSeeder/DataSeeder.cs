@@ -10,55 +10,55 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.DataAccess.DataSeeder;
 
-public class DataSeeder
+public static class DataSeeder
 {
-    public readonly LibraryAppDbContext _dbContext;
-    private readonly PasswordHasher passwordHasher = new PasswordHasher();
+    // public readonly LibraryAppDbContext _dbContext;
+    private static readonly PasswordHasher PasswordHasher = new PasswordHasher();
+    //
+    // public DataSeeder(LibraryAppDbContext dbContext)
+    // {
+    //     _dbContext = dbContext;
+    // }
+    //
+    // public void Seed()
+    // {
+    //     var users = GenerateUsers();
+    //     var authors = GenerateAuthors();
+    //     var books = GenerateBooks(authors, users);
+    //     
+    //     SeedUsers(users);
+    //     SeedAuthors(authors);
+    //     SeedBooks(books);
+    // }
 
-    public DataSeeder(LibraryAppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    // private void SeedUsers(List<UserEntity> users)
+    // {
+    //     if (!_dbContext.Users.Any())
+    //     {
+    //         _dbContext.Users.AddRange(users);
+    //         _dbContext.SaveChanges();
+    //     }
+    // }
 
-    public void Seed()
-    {
-        var users = GenerateUsers();
-        var authors = GenerateAuthors();
-        var books = GenerateBooks(authors, users);
-        
-        SeedUsers(users);
-        SeedAuthors(authors);
-        SeedBooks(books);
-    }
+    // private void SeedAuthors(List<AuthorEntity> authors)
+    // {
+    //     if (!_dbContext.Authors.Any())
+    //     {
+    //         _dbContext.Authors.AddRange(authors);
+    //         _dbContext.SaveChanges();
+    //     }
+    // }
 
-    private void SeedUsers(List<UserEntity> users)
-    {
-        if (!_dbContext.Users.Any())
-        {
-            _dbContext.Users.AddRange(users);
-            _dbContext.SaveChanges();
-        }
-    }
+    // private void SeedBooks(List<BookEntity> books)
+    // {
+    //     if (!_dbContext.Books.Any())
+    //     {
+    //         _dbContext.Books.AddRange(books);
+    //         _dbContext.SaveChanges();
+    //     }
+    // }
 
-    private void SeedAuthors(List<AuthorEntity> authors)
-    {
-        if (!_dbContext.Authors.Any())
-        {
-            _dbContext.Authors.AddRange(authors);
-            _dbContext.SaveChanges();
-        }
-    }
-
-    private void SeedBooks(List<BookEntity> books)
-    {
-        if (!_dbContext.Books.Any())
-        {
-            _dbContext.Books.AddRange(books);
-            _dbContext.SaveChanges();
-        }
-    }
-
-    private List<UserEntity> GenerateUsers()
+    public static List<UserEntity> GenerateUsers()
     {
         return new List<UserEntity>
         {
@@ -67,7 +67,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "booklover123",
                 Email = "booklover123@example.com",
-                PasswordHash = passwordHasher.Generate("hashedpassword1"),
+                PasswordHash = PasswordHasher.Generate("hashedpassword1"),
                 Role = Role.User
             },
             new UserEntity
@@ -75,7 +75,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "adminuser",
                 Email = "admin@example.com",
-                PasswordHash = passwordHasher.Generate("hashedpassword2"),
+                PasswordHash = PasswordHasher.Generate("hashedpassword2"),
                 Role = Role.Admin
             },
             new UserEntity
@@ -83,7 +83,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "literaturefan",
                 Email = "fan@example.com",
-                PasswordHash = passwordHasher.Generate("hashedpassword3"),
+                PasswordHash = PasswordHasher.Generate("hashedpassword3"),
                 Role = Role.User
             },
             new UserEntity
@@ -91,7 +91,7 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "historybuff",
                 Email = "historybuff@example.com",
-                PasswordHash = passwordHasher.Generate("hashedpassword4"),
+                PasswordHash = PasswordHasher.Generate("hashedpassword4"),
                 Role = Role.User
             },
             new UserEntity
@@ -99,13 +99,13 @@ public class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "sciencegeek",
                 Email = "sciencegeek@example.com",
-                PasswordHash = passwordHasher.Generate("hashedpassword5"),
+                PasswordHash = PasswordHasher.Generate("hashedpassword5"),
                 Role = Role.User
             }
         };
     }
 
-    private List<AuthorEntity> GenerateAuthors()
+    public static List<AuthorEntity> GenerateAuthors()
     {
         return new List<AuthorEntity>
         {
@@ -147,7 +147,7 @@ public class DataSeeder
         };
     }
 
-    private List<BookEntity> GenerateBooks(List<AuthorEntity> authors, List<UserEntity> users )
+    public static List<BookEntity> GenerateBooks(List<AuthorEntity> authors, List<UserEntity> users )
     {
         return new List<BookEntity>
         {
@@ -158,7 +158,6 @@ public class DataSeeder
                 Title = "The Hobbit",
                 Genre = "Fantasy",
                 Description = "A fantasy novel by J.R.R. Tolkien.",
-                Author = authors[0],
                 AuthorId = authors[0].Id,
                 TakenAt = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(-10), DateTimeKind.Utc),
                 ReturnBy = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(20), DateTimeKind.Utc),
@@ -171,7 +170,6 @@ public class DataSeeder
                 Title = "Harry Potter and the Philosopher's Stone",
                 Genre = "Fantasy",
                 Description = "The first book in the Harry Potter series by J.K. Rowling.",
-                Author = authors[1],
                 AuthorId = authors[1].Id,
                 TakenAt = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(-5), DateTimeKind.Utc),
                 ReturnBy = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(15), DateTimeKind.Utc),
@@ -184,7 +182,6 @@ public class DataSeeder
                 Title = "A Game of Thrones",
                 Genre = "Fantasy",
                 Description = "The first book in the A Song of Ice and Fire series by George R.R. Martin.",
-                Author = authors[2],
                 AuthorId = authors[2].Id,
                 TakenAt = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(-20), DateTimeKind.Utc),
                 ReturnBy = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(5), DateTimeKind.Utc),
@@ -197,7 +194,6 @@ public class DataSeeder
                 Title = "1984",
                 Genre = "Dystopian",
                 Description = "A dystopian novel by George Orwell.",
-                Author = authors[3],
                 AuthorId = authors[3].Id
             },
             new BookEntity
@@ -207,7 +203,6 @@ public class DataSeeder
                 Title = "Pride and Prejudice",
                 Genre = "Classic",
                 Description = "A classic novel by Jane Austen.",
-                Author = authors[4],
                 AuthorId = authors[4].Id
             },
             new BookEntity
@@ -217,7 +212,6 @@ public class DataSeeder
                 Title = "The Lord of the Rings",
                 Genre = "Fantasy",
                 Description = "An epic high-fantasy novel by J.R.R. Tolkien.",
-                Author = authors[0],
                 AuthorId = authors[0].Id
             },
             new BookEntity
@@ -227,7 +221,6 @@ public class DataSeeder
                 Title = "Harry Potter and the Half-Blood Prince",
                 Genre = "Fantasy",
                 Description = "The sixth book in the Harry Potter series by J.K. Rowling.",
-                Author = authors[1],
                 AuthorId = authors[1].Id
             }
         };

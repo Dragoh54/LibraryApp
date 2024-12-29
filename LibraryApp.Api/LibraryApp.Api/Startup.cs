@@ -44,7 +44,7 @@ public class Startup
 
         services.AddDbContext<LibraryAppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("LibraryAppDbContext")));
-        services.AddTransient<DataSeeder>();
+        //services.AddTransient<DataSeeder>();
         
         services.AddMediatRServices();
         services.AddRepositories();
