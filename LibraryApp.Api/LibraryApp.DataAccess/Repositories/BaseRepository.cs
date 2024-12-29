@@ -52,6 +52,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : IdEntity
 
     public async Task Delete(T item)
     {
-        await _dbSet.Where(x => x.Id == item.Id).ExecuteDeleteAsync();
+        var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == item.Id);
+        
+        _dbSet.Remove(entity);
     }
 }

@@ -27,11 +27,6 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
         .Include(a => a.Books)
         .FirstOrDefaultAsync(a => a.Id == id);
 
-        // if (result is null)
-        // {
-        //     throw new Exception("Author with this id doesn't exist");
-        // }
-
         return result?.Books;
     }
     
