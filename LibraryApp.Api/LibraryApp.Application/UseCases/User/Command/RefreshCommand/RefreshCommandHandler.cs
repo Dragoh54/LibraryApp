@@ -6,21 +6,19 @@ namespace LibraryApp.Application.UseCases.User.Command.RefreshCommand;
 
 public class RefreshCommandHandler : IRequestHandler<RefreshCommand, string>
 {
-    private readonly IPasswordHasher _passwordHasher;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJwtProvider _jwtProvider;
 
-    public RefreshCommandHandler(IUnitOfWork appUnitOfWork, IPasswordHasher passwordHasher, IJwtProvider jwtProvider)
+    public RefreshCommandHandler(IUnitOfWork appUnitOfWork, IJwtProvider jwtProvider)
     {
         _unitOfWork = appUnitOfWork;
-        _passwordHasher = passwordHasher;
         _jwtProvider = jwtProvider;
     }
 
 
     public async Task<string> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
-        var refreshToken = request.HttpContext.Request.Cookies["not-a-refresh-token-cookies"];
+        var refreshToken = request.Token;
         if (string.IsNullOrEmpty(refreshToken))
         {
             throw new UnauthorizedAccessException("Refresh token is missing.");

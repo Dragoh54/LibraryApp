@@ -1,18 +1,19 @@
-﻿using MediatR;
+﻿using LibraryApp.Application.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.UseCases.User.Command.LogoutCommand;
 
-public class LogoutCommand : IRequest<bool>
+public record LogoutCommand : RefreshTokenDto, IRequest<bool>
 {
-    public HttpContext HttpContext { get; set; }
+    public string Token { get; set; }
 
     public LogoutCommand()
     {
     }
 
-    public LogoutCommand(HttpContext httpContext)
+    public LogoutCommand(string token)
     {
-        HttpContext = httpContext;
+        Token = token;
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using LogoutCommand = LibraryApp.Application.UseCases.User.Command.LogoutCommand.LogoutCommand;
 
 namespace LibraryApp.Api.Controllers;
 
@@ -64,7 +65,12 @@ public class AuthenficationController : Controller
     [Authorize]
     public async Task<IResult> Logout(CancellationToken cancellationToken)
     {
-        var success = await _mediator.Send(new LogoutCommand(HttpContext), cancellationToken);
+        string? refreshToken = HttpContext.Request.Cookies["not-a-refresh-token-cookies"];
+        var success = await _mediator.Send(new LogoutCommand(refreshToken), cancellationToken);
+        
+        HttpContext.Response.Cookies.Delete("tasty-cookies");
+        HttpContext.Response.Cookies.Delete("not-a-refresh-token-cookies");
+        
         return Results.Ok(success);
     }
     
@@ -72,7 +78,8 @@ public class AuthenficationController : Controller
     [AllowAnonymous]
     public async Task<IResult> Refresh(CancellationToken cancellationToken)
     {
-        var token =await _mediator.Send(new RefreshCommand(HttpContext), cancellationToken);
+        string? refreshToken = HttpContext.Request.Cookies["not-a-refresh-token-cookies"];
+        var token = await _mediator.Send(new RefreshCommand(refreshToken), cancellationToken);
         
         HttpContext.Response.Cookies.Append("tasty-cookies", token, new CookieOptions()
         {

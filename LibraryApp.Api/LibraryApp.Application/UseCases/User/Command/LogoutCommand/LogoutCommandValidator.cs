@@ -1,6 +1,8 @@
-﻿namespace LibraryApp.Application.UseCases.User.Command.LogoutCommand;
+﻿using FluentValidation;
+using LibraryApp.Application.Validators;
 
-public class LogoutCommandValidator
+namespace LibraryApp.Application.UseCases.User.Command.LogoutCommand;
+
+public class LogoutCommandValidator : RefreshTokenValidator<LogoutCommand>
 {
-    
 }

@@ -1,18 +1,19 @@
-﻿using MediatR;
+﻿using LibraryApp.Application.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.UseCases.User.Command.RefreshCommand;
 
-public class RefreshCommand : IRequest<string>
+public record RefreshCommand : RefreshTokenDto, IRequest<string>
 {
-    public HttpContext HttpContext { get; set; }
+    public string Token { get; set; }
 
     public RefreshCommand()
     {
     }
 
-    public RefreshCommand(HttpContext httpContext)
+    public RefreshCommand(string token)
     {
-        HttpContext = httpContext;
+        Token = token;
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace LibraryApp.Application.UseCases.User.Command.RefreshCommand;
+﻿using FluentValidation;
+using LibraryApp.Application.Validators;
 
-public class RefreshCommandValidator
+namespace LibraryApp.Application.UseCases.User.Command.RefreshCommand;
+
+public class RefreshCommandValidator : RefreshTokenValidator<RefreshCommand>
 {
-    
 }
