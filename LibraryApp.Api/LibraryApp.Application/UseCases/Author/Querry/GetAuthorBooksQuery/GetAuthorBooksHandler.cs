@@ -17,7 +17,7 @@ public class GetAuthorBooksHandler : IRequestHandler<GetAuthorBooksQuery, IEnume
     
     public async Task<IEnumerable<BookDto>> Handle(GetAuthorBooksQuery request, CancellationToken cancellationToken)
     {
-        var books = await _unitOfWork.AuthorRepository.GetAuthorBooks(request.Id);
+        var books = await _unitOfWork.AuthorRepository.GetAuthorBooks(request.Id, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if (books is null)

@@ -17,7 +17,7 @@ public class GetBookByIdHandler: IRequestHandler<GetBookByIdQuery, BookDto>
 
     public async Task<BookDto> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
     {
-        var book = await _unitOfWork.BookRepository.Get(request.Id);
+        var book = await _unitOfWork.BookRepository.Get(request.Id, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if(book is null)

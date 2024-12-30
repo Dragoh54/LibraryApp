@@ -24,7 +24,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "booklover123",
                 Email = "booklover123@example.com",
-                PasswordHash = ph.Generate("hashedpassword1"),
+                PasswordHash = ph.Generate("hashedpassword1", new CancellationToken()),
                 Role = Role.User
             },
             new UserEntity
@@ -32,7 +32,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "adminuser",
                 Email = "admin@example.com",
-                PasswordHash = ph.Generate("hashedpassword2"),
+                PasswordHash = ph.Generate("hashedpassword2", new CancellationToken()),
                 Role = Role.Admin
             },
             new UserEntity
@@ -40,7 +40,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "literaturefan",
                 Email = "fan@example.com",
-                PasswordHash = ph.Generate("hashedpassword3"),
+                PasswordHash = ph.Generate("hashedpassword3", new CancellationToken()),
                 Role = Role.User
             },
             new UserEntity
@@ -48,7 +48,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "historybuff",
                 Email = "historybuff@example.com",
-                PasswordHash = ph.Generate("hashedpassword4"),
+                PasswordHash = ph.Generate("hashedpassword4", new CancellationToken()),
                 Role = Role.User
             },
             new UserEntity
@@ -56,7 +56,7 @@ public static class DataSeeder
                 Id = Guid.NewGuid(),
                 Nickname = "sciencegeek",
                 Email = "sciencegeek@example.com",
-                PasswordHash = ph.Generate("hashedpassword5"),
+                PasswordHash = ph.Generate("hashedpassword5", new CancellationToken()),
                 Role = Role.User
             }
         };

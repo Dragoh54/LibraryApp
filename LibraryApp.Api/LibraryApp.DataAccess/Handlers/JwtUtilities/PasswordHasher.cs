@@ -9,9 +9,19 @@ namespace LibraryApp.DataAccess.Utilities;
 
 public class PasswordHasher : IPasswordHasher
 {
-    public string Generate(string password) =>
-        BCrypt.Net.BCrypt.EnhancedHashPassword(password);
+    public string Generate(string password, CancellationToken cancellationToken)
+    {
+        var token = BCrypt.Net.BCrypt.EnhancedHashPassword(password);
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        return token;
+    }
 
-    public bool Verify(string password, string hashedPassword) =>
-        BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword);
+    public bool Verify(string password, string hashedPassword, CancellationToken cancellationToken)
+    {
+        var success = BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword);
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        return success;
+    }
 }

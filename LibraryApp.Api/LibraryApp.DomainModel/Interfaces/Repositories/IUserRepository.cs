@@ -9,5 +9,5 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IUserRepository : IBaseRepository<UserEntity>
 {
-    public Task<UserEntity?> GetByEmail(string email);
+    public Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken);
 }

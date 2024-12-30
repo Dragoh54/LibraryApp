@@ -10,7 +10,7 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IBookRepository : IBaseRepository<BookEntity>
 {
-    public Task<BookEntity?> GetByISBN(string ISBN);
+    public Task<BookEntity?> GetByISBN(string ISBN, CancellationToken cancellationToken);
     
-    public Task<(List<BookEntity>?, int)> GetBooks(BookFilters filters, int page, int pageSize);
+    public Task<(List<BookEntity>?, int)> GetBooks(BookFilters filters, int page, int pageSize, CancellationToken cancellationToken);
 }

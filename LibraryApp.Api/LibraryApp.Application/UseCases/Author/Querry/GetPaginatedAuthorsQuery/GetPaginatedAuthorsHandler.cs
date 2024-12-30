@@ -24,7 +24,7 @@ public class GetPaginatedAuthorsHandler : IRequestHandler<GetPaginatedAuthorsQue
         {
             throw new BadRequestException("Page and pageSize must be greater than zero.");
         }
-        var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(request.Filters, pageNumber, pageSize);
+        var (items, totalCount) = await _unitOfWork.AuthorRepository.GetAuthors(request.Filters, pageNumber, pageSize, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if (items is null)

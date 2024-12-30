@@ -17,11 +17,11 @@ public class TakeBookHandler : IRequestHandler<TakeBookCommand, bool>
     {
         var userId = Guid.Parse(request.UserClaimId);
     
-        _ = await _unitOfWork.UserRepository.Get(userId)
+        _ = await _unitOfWork.UserRepository.Get(userId, cancellationToken)
             ?? throw new NotFoundException("User not found.");
         cancellationToken.ThrowIfCancellationRequested();
 
-        var book = await _unitOfWork.BookRepository.Get(request.Id)
+        var book = await _unitOfWork.BookRepository.Get(request.Id, cancellationToken)
                    ?? throw new NotFoundException("Book not found.");
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -34,7 +34,7 @@ public class TakeBookHandler : IRequestHandler<TakeBookCommand, bool>
         book.ReturnBy = DateTime.UtcNow.AddMonths(1);
         book.UserId = userId;
 
-        await _unitOfWork.BookRepository.Update(book);
+        await _unitOfWork.BookRepository.Update(book, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();

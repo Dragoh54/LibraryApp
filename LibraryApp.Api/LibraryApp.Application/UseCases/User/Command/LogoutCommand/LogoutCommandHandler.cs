@@ -24,7 +24,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, bool>
             throw new UnauthorizedAccessException("Incorrect refresh token");
         }
 
-        var refreshToken = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(token)).Result;
+        var refreshToken = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(token), cancellationToken).Result;
         cancellationToken.ThrowIfCancellationRequested();
 
         if (refreshToken is null)
@@ -35,7 +35,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, bool>
         refreshToken.IsUsed = true;
         refreshToken.WhenUsed = DateTime.UtcNow;
 
-        await _unitOfWork.RefreshTokenRepository.Update(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.Update(refreshToken, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
 
         return true;

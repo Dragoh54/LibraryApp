@@ -20,14 +20,18 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
     }
 
 
-    public async Task<BookEntity?> GetByISBN(string ISBN)
+    public async Task<BookEntity?> GetByISBN(string ISBN, CancellationToken cancellationToken)
     {
-        return await _dbContext.Books
+        var book = await _dbContext.Books
            .AsNoTracking()
            .FirstOrDefaultAsync(b => b.ISBN == ISBN);
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        return book;
     }
     
-    public async Task<(List<BookEntity>?, int)> GetBooks(BookFilters filter, int page, int pageSize)
+    public async Task<(List<BookEntity>?, int)> GetBooks(BookFilters filter, int page, int pageSize, CancellationToken cancellationToken)
     {
         var query = _dbContext.Books
             .AsNoTracking()
@@ -37,6 +41,8 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
             .Where(b => filter.Author.IsNullOrEmpty() || b.Author.Surname.Contains(filter.Author))
             .AsQueryable();
         
+        cancellationToken.ThrowIfCancellationRequested();
+        
         var totalCount = await query.CountAsync();
 
         var items = await query
@@ -44,6 +50,8 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+        
+        cancellationToken.ThrowIfCancellationRequested();
 
         return (items, totalCount);
     }

@@ -17,7 +17,7 @@ public class DeleteBookHandler: IRequestHandler<DeleteBookCommand, BookDto>
 
     public async Task<BookDto> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _unitOfWork.BookRepository.Get(request.Id);
+        var book = await _unitOfWork.BookRepository.Get(request.Id, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if (book is null)
@@ -25,7 +25,7 @@ public class DeleteBookHandler: IRequestHandler<DeleteBookCommand, BookDto>
             throw new NotFoundException("Book with this id doesn't exist");
         }
         
-        await _unitOfWork.BookRepository.Delete(book);
+        await _unitOfWork.BookRepository.Delete(book, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();

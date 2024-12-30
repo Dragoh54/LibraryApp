@@ -4,5 +4,5 @@ namespace LibraryApp.Application.Interfaces.Repositories;
 
 public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
 {
-    public Task<RefreshToken?> GetByUserId(Guid userId);
+    public Task<RefreshToken?> GetByUserId(Guid userId, CancellationToken cancellationToken);
 }

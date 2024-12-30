@@ -20,17 +20,19 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
     {
     }
 
-    public async Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id)
+    public async Task<IEnumerable<BookEntity>?> GetAuthorBooks(Guid id, CancellationToken cancellationToken)
     {
         var result = await _dbContext.Authors
         .AsNoTracking()
         .Include(a => a.Books)
         .FirstOrDefaultAsync(a => a.Id == id);
+        
+        cancellationToken.ThrowIfCancellationRequested();
 
         return result?.Books;
     }
     
-    public async Task<(List<AuthorEntity>?, int)> GetAuthors(AuthorFilters filter, int page, int pageSize)
+    public async Task<(List<AuthorEntity>?, int)> GetAuthors(AuthorFilters filter, int page, int pageSize, CancellationToken cancellationToken)
     {
         var query = _dbContext.Authors
             .AsNoTracking()
@@ -38,6 +40,8 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
             .Where(a => a.Country.Contains(filter.Country))
             .Where(a => filter.DateOfBirth.IsNullOrEmpty() || a.BirthDate.Date == DateTime.Parse(filter.DateOfBirth).Date)
             .AsQueryable();
+        
+        cancellationToken.ThrowIfCancellationRequested();
 
         var totalCount = await query.CountAsync();
 
@@ -46,6 +50,8 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+        
+        cancellationToken.ThrowIfCancellationRequested();
 
         return (items, totalCount);
     }

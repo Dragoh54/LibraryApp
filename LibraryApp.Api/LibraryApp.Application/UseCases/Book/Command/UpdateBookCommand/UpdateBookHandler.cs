@@ -18,12 +18,12 @@ public class UpdateBookHandler : IRequestHandler<UpdateBookCommand, BookDto>
     
     public async Task<BookDto> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        _ = await _unitOfWork.BookRepository.Get(request.Id) ?? 
+        _ = await _unitOfWork.BookRepository.Get(request.Id, cancellationToken) ?? 
             throw new NotFoundException("Book with this id doesn't exist");
         
         cancellationToken.ThrowIfCancellationRequested();
         
-        var existingBook = await _unitOfWork.BookRepository.GetByISBN(request.ISBN);
+        var existingBook = await _unitOfWork.BookRepository.GetByISBN(request.ISBN, cancellationToken);
         if (existingBook != null)
         {
             throw new AlreadyExistsException("A book with this ISBN already exists.");
@@ -31,7 +31,7 @@ public class UpdateBookHandler : IRequestHandler<UpdateBookCommand, BookDto>
         
         var updatedBook = request.Adapt<BookDto>();
 
-        await _unitOfWork.BookRepository.Update(updatedBook.Adapt<BookEntity>());
+        await _unitOfWork.BookRepository.Update(updatedBook.Adapt<BookEntity>(), cancellationToken);
         await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();

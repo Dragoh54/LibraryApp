@@ -16,10 +16,14 @@ public class UsersRepository : BaseRepository<UserEntity>, IUserRepository
     {
     }
 
-    public async Task<UserEntity?> GetByEmail(string email)
+    public async Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users
+        var user = await _dbContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == email);
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        return user;
     }
 }

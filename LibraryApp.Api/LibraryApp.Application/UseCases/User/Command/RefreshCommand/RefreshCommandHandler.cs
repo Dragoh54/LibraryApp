@@ -24,7 +24,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, string>
             throw new UnauthorizedAccessException("Refresh token is missing.");
         }
         
-        var token = await _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken));
+        var token = await _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
         
         if (token is null)
@@ -37,7 +37,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, string>
             throw new UnauthorizedAccessException("Refresh token has expired.");
         }
         
-        var user = await _unitOfWork.UserRepository.Get(token.UserId);
+        var user = await _unitOfWork.UserRepository.Get(token.UserId, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
         
         if (user == null)
@@ -45,7 +45,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, string>
             throw new UnauthorizedAccessException("Invalid refresh token.");
         }
 
-        var newAccessToken = _jwtProvider.GenerateAccessToken(user);
+        var newAccessToken = _jwtProvider.GenerateAccessToken(user, cancellationToken);
         
         if (newAccessToken is null)
         {

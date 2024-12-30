@@ -17,7 +17,7 @@ public class GetAllAuthorsHandler : IRequestHandler<GetAllAuthorsQuery, IEnumera
     
     public async Task<IEnumerable<AuthorDto>> Handle(GetAllAuthorsQuery request, CancellationToken cancellationToken)
     {
-        var authors = await _unitOfWork.AuthorRepository.GetAll();
+        var authors = await _unitOfWork.AuthorRepository.GetAll(cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
         
         if (!authors.Any())

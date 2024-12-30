@@ -17,7 +17,7 @@ public class GetAllBooksHandler: IRequestHandler<GetAllBooksQuery, IEnumerable<B
 
     public async Task<IEnumerable<BookDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
     {
-        var books = await _unitOfWork.BookRepository.GetAll();
+        var books = await _unitOfWork.BookRepository.GetAll(cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
         
         if (!books.Any())

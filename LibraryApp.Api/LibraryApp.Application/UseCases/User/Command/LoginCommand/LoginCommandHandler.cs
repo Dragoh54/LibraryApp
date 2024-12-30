@@ -20,7 +20,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, (string, string
     
     public async Task<(string, string)> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var userByEmail = await _unitOfWork.UserRepository.GetByEmail(request.Email);
+        var userByEmail = await _unitOfWork.UserRepository.GetByEmail(request.Email, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if (userByEmail is null)
@@ -28,22 +28,22 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, (string, string
             throw new NotFoundException("Cannot found user with this email");
         }
 
-        var result = _passwordHasher.Verify(request.Password, userByEmail.PasswordHash);
+        var result = _passwordHasher.Verify(request.Password, userByEmail.PasswordHash, cancellationToken);
 
         if (!result)
         {
             throw new BadRequestException("Failed to login");
         }
 
-        var token = _jwtProvider.GenerateAccessToken(userByEmail);
-        var refreshToken = _jwtProvider.GenerateRefreshToken(userByEmail);
+        var token = _jwtProvider.GenerateAccessToken(userByEmail, cancellationToken);
+        var refreshToken = _jwtProvider.GenerateRefreshToken(userByEmail, cancellationToken);
         
         if (refreshToken is null || token is null)
         {
             throw new UnauthorizedAccessException("Failed to generate tokens.");
         }
         
-        await _unitOfWork.RefreshTokenRepository.Add(refreshToken);
+        await _unitOfWork.RefreshTokenRepository.Add(refreshToken, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
 
         cancellationToken.ThrowIfCancellationRequested();

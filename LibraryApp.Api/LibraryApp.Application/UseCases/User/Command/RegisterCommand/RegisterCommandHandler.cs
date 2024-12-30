@@ -24,7 +24,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
     
     public async Task<UserDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var candidate = await _unitOfWork.UserRepository.GetByEmail(request.Email);
+        var candidate = await _unitOfWork.UserRepository.GetByEmail(request.Email, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
         if(candidate is not null)
@@ -32,11 +32,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
             throw new AlreadyExistsException("User with this email already exists!");
         }
 
-        var hashedPassword = _passwordHasher.Generate(request.Password);
+        var hashedPassword = _passwordHasher.Generate(request.Password, cancellationToken);
 
         var user = new UserEntity(Guid.NewGuid(), request.Nickname, request.Email, hashedPassword, Role.User);
 
-        await _unitOfWork.UserRepository.Add(user);
+        await _unitOfWork.UserRepository.Add(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();

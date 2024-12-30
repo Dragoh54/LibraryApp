@@ -11,10 +11,14 @@ public class RefreshTokenRepository : BaseRepository<RefreshToken>, IRefreshToke
     {
     }
 
-    public async Task<RefreshToken?> GetByUserId(Guid userId)
+    public async Task<RefreshToken?> GetByUserId(Guid userId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Tokens
+        var token = await _dbContext.Tokens
             .AsNoTracking()
             .FirstOrDefaultAsync(rt => rt.UserId == userId);
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        return token;
     }
 }

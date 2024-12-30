@@ -19,7 +19,7 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
 
     private readonly string _secretKey = configuration["JWTSecretKey"];
 
-    public string GenerateAccessToken(UserEntity user)
+    public string GenerateAccessToken(UserEntity user, CancellationToken cancellationToken)
     {
         Claim[] claims = [
             new("Id", user.Id.ToString()),
@@ -31,6 +31,8 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
         var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey)),
                 SecurityAlgorithms.HmacSha256);
+        
+        cancellationToken.ThrowIfCancellationRequested();
 
         var token = new JwtSecurityToken(
                 claims: claims,
@@ -39,14 +41,18 @@ public class JwtProvider(IConfiguration configuration, IOptions<JwtOptions> opti
             );
 
         var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+        cancellationToken.ThrowIfCancellationRequested();
 
         return tokenValue;
     }
 
-    public RefreshToken GenerateRefreshToken(UserEntity user)
+    public RefreshToken GenerateRefreshToken(UserEntity user, CancellationToken cancellationToken)
     {
         var token = new RefreshToken(Guid.NewGuid(), user.Id,
             DateTime.UtcNow.AddDays(_options.ExpiresDays));
+        
+        cancellationToken.ThrowIfCancellationRequested();
+        
         return token;
     }
 }
