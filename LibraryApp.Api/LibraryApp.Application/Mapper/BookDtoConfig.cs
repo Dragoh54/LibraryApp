@@ -1,4 +1,6 @@
-﻿using LibraryApp.DataAccess.Dto;
+﻿using LibraryApp.Application.UseCases.Book.Command.AddBookCommand;
+using LibraryApp.Application.UseCases.Book.Command.UpdateBookCommand;
+using LibraryApp.DataAccess.Dto;
 using LibraryApp.Entities.Models;
 using Mapster;
 
@@ -18,14 +20,14 @@ public class BookDtoConfig
             .Map(dest => dest.ReturnBy, src => src.ReturnBy)
             .Map(dest => dest.AuthorId, src => src.AuthorId);
         
-        TypeAdapterConfig<UpdateBookDto, BookDto>.NewConfig()
+        TypeAdapterConfig<UpdateBookCommand, BookDto>.NewConfig()
             .Map(dest => dest.AuthorId, src => src.AuthorId)
             .Map(dest => dest.Title, src => src.Title)
             .Map(dest => dest.Description, src => src.Description)
             .Map(dest => dest.Genre, src => src.Genre)
             .Map(dest => dest.ISBN, src => src.ISBN);
         
-        TypeAdapterConfig<CreateBookDto, BookDto>.NewConfig()
+        TypeAdapterConfig<AddBookCommand, BookDto>.NewConfig()
             .Map(dest => dest.AuthorId, src => src.AuthorId)
             .Map(dest => dest.Title, src => src.Title)
             .Map(dest => dest.Description, src => src.Description)

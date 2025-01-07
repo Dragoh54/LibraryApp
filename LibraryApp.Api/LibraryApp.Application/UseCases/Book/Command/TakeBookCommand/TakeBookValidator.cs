@@ -19,6 +19,8 @@ public class TakeBookValidator : AbstractValidator<TakeBookCommand>
 
         RuleFor(book => book.Id)
             .NotNull()
-            .WithMessage("The book object cannot be null.");
+            .WithMessage("The book id cannot be null.")
+            .NotEmpty()
+            .WithMessage("The book id cannot be empty.");
     }
 }
