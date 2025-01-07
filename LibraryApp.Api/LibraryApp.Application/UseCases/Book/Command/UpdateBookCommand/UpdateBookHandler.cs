@@ -28,13 +28,11 @@ public class UpdateBookHandler : IRequestHandler<UpdateBookCommand, BookDto>
         {
             throw new AlreadyExistsException("A book with this ISBN already exists.");
         }
-        
-        var updatedBook = request.Adapt<BookDto>();
 
-        await _unitOfWork.BookRepository.Update(updatedBook.Adapt<BookEntity>(), cancellationToken);
+        await _unitOfWork.BookRepository.Update(request.Adapt<BookEntity>(), cancellationToken);
         await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
-        return updatedBook;
+        return request.Adapt<BookDto>();
     }
 }

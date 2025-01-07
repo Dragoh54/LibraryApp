@@ -18,11 +18,6 @@ public class GetPaginatedBooksHandler : IRequestHandler<GetPaginatedBooksQuery, 
     public async Task<PaginatedPagedResult<BookDto>> Handle(GetPaginatedBooksQuery request, CancellationToken cancellationToken)
     {
         (int pageNumber, int pageSize) = (request.PageNumber, request.PageSize);
-        
-        if (pageNumber <= 0 || pageSize <= 0)
-        {
-            throw new ArgumentException("Page and pageSize must be greater than zero.");
-        }
 
         var (items, totalCount) = await _unitOfWork.BookRepository.GetBooks(request.Filters, pageNumber, pageSize, cancellationToken);
 

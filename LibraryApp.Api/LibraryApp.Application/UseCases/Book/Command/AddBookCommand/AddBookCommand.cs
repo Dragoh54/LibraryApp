@@ -3,14 +3,23 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Book.Command.AddBookCommand;
 
-public record AddBookCommand : CreateBookDto, IRequest<BookDto>
+public record AddBookCommand : IRequest<BookDto>
 {
-    public AddBookCommand()
-    {
-    }
+    public string ISBN { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Genre {  get; set; } = string.Empty;
 
-    public AddBookCommand(string isbn, string title, string description, string genre, Guid authorId) : base(isbn,
-        title, description, genre, authorId)
+    public Guid AuthorId { get; set; }
+    
+    public AddBookCommand() {}
+
+    public AddBookCommand(string isbn, string title, string description, string genre, Guid authorId)
     {
+        ISBN = isbn;
+        Title = title;
+        Description = description;
+        Genre = genre;
+        AuthorId = authorId;
     }
 }

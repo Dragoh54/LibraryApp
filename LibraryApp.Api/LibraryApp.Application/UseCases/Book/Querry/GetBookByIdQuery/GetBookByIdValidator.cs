@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using LibraryApp.Application.Validators;
 
-namespace LibraryApp.Application.UseCases.Book.Command.DeleteBookCommand;
+namespace LibraryApp.Application.UseCases.Book.Querry.GetBookByIdQuery;
 
-public class DeleteBookVaidator : AbstractValidator<DeleteBookCommand>
+public class GetBookByIdValidator : AbstractValidator<GetBookByIdQuery>
 {
-    public DeleteBookVaidator()
+    public GetBookByIdValidator()
     {
         RuleFor(x => x)
             .NotNull()

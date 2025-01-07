@@ -3,8 +3,11 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Book.Command.TakeBookCommand;
 
-public record TakeBookCommand : TakeBookDto, IRequest<bool>
+public record TakeBookCommand : IRequest<bool>
 {
+    public Guid Id { get; set; }
+    public string? UserClaimId { get; set; } = string.Empty;
+    
     public TakeBookCommand()
     {
     }

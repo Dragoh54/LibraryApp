@@ -28,16 +28,5 @@ public class AuthorDtoConfig
             .Map(dest => dest.Surname, src => src.Surname)
             .Map(dest => dest.Country, src => src.Country)
             .Map(dest => dest.BirthDate, src => src.BirthDate);
-
-        // TypeAdapterConfig<CreateAuthorDto, AuthorDto>.NewConfig()
-        //     .Map(dest => dest.Surname, src => src.Surname)
-        //     .Map(dest => dest.Country, src => src.Country)
-        //     .Map(dest => dest.BirthDate, src => src.BirthDate);
-        //
-        // TypeAdapterConfig<UpdateAuthorDto, AuthorDto>.NewConfig()
-        //     .Map(dest => dest.Id, src => src.Id)
-        //     .Map(dest => dest.Surname, src => src.Surname)
-        //     .Map(dest => dest.Country, src => src.Country)
-        //     .Map(dest => dest.BirthDate, src => src.BirthDate);
     }
 }

@@ -4,8 +4,10 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Book.Command.DeleteBookCommand;
 
-public record DeleteBookCommand : IdModel, IRequest<BookDto>
+public record DeleteBookCommand : IRequest<BookDto>
 {
+    public Guid Id { get; set; }
+    
     public DeleteBookCommand()
     {
     }

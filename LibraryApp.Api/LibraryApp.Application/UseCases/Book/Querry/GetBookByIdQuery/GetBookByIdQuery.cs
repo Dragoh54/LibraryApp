@@ -4,8 +4,10 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Book.Querry.GetBookByIdQuery;
 
-public record GetBookByIdQuery : IdModel, IRequest<BookDto>
+public record GetBookByIdQuery : IRequest<BookDto>
 {
+    public Guid Id { get; set; }
+    
     public GetBookByIdQuery() { }
     public GetBookByIdQuery(Guid id)
     {
