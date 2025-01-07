@@ -20,7 +20,7 @@ public class UsersRepository : BaseRepository<UserEntity>, IUserRepository
     {
         var user = await _dbContext.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
         

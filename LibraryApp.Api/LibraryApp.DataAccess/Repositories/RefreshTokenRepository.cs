@@ -15,7 +15,7 @@ public class RefreshTokenRepository : BaseRepository<RefreshToken>, IRefreshToke
     {
         var token = await _dbContext.Tokens
             .AsNoTracking()
-            .FirstOrDefaultAsync(rt => rt.UserId == userId);
+            .FirstOrDefaultAsync(rt => rt.UserId == userId, cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
         

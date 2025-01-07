@@ -25,7 +25,7 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
         var result = await _dbContext.Authors
         .AsNoTracking()
         .Include(a => a.Books)
-        .FirstOrDefaultAsync(a => a.Id == id);
+        .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -43,13 +43,13 @@ public class AuthorRepository : BaseRepository<AuthorEntity>, IAuthorRepository
         
         cancellationToken.ThrowIfCancellationRequested();
 
-        var totalCount = await query.CountAsync();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
             .OrderBy(a => a.Surname) 
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -44,11 +44,6 @@ public class UnitOfWork : IUnitOfWork
 
         this.disposed = true;
     }
-
-    public void Save()
-    {
-        _dbContext.SaveChanges();
-    }
     
     public async Task SaveChangesAsync()
     {

@@ -21,7 +21,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : IdEntity
     {
         var res = await _dbSet
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
         return res;
@@ -31,18 +31,17 @@ public class BaseRepository<T> : IBaseRepository<T> where T : IdEntity
     {
         var entity = await _dbSet
             .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == id);
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
+        
         return entity;
     }
 
     public async Task<T> Add(T item, CancellationToken cancellationToken)
     {
-        var result = await _dbSet.AddAsync(item);
+        var result = await _dbSet.AddAsync(item, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
-        
-        await _dbContext.SaveChangesAsync();
 
         return result.Entity;
     }
@@ -57,16 +56,13 @@ public class BaseRepository<T> : IBaseRepository<T> where T : IdEntity
 
     public async Task SaveAsync(CancellationToken cancellationToken)
     {
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
     }
 
     public async Task Delete(T item, CancellationToken cancellationToken)
     {
-        var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == item.Id);
-        cancellationToken.ThrowIfCancellationRequested();
-        
-        _dbSet.Remove(entity);
+        _dbSet.Remove(item);
         cancellationToken.ThrowIfCancellationRequested();
     }
 }

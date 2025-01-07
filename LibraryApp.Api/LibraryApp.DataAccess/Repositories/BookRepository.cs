@@ -24,7 +24,7 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
     {
         var book = await _dbContext.Books
            .AsNoTracking()
-           .FirstOrDefaultAsync(b => b.ISBN == ISBN);
+           .FirstOrDefaultAsync(b => b.ISBN == ISBN, cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
         
@@ -43,13 +43,14 @@ public class BookRepository : BaseRepository<BookEntity>, IBookRepository
         
         cancellationToken.ThrowIfCancellationRequested();
         
-        var totalCount = await query.CountAsync();
+        var totalCount = await query.CountAsync(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
 
         var items = await query
             .OrderBy(b => b.Title) 
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         
         cancellationToken.ThrowIfCancellationRequested();
 
