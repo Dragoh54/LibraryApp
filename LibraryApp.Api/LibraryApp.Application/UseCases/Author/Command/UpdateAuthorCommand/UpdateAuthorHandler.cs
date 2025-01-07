@@ -20,13 +20,11 @@ public class UpdateAuthorHandler : IRequestHandler<UpdateAuthorCommand, AuthorDt
     {
         _ = await _unitOfWork.AuthorRepository.Get(request.Id, cancellationToken) ?? 
             throw new NotFoundException("Author with this id doesn't exist");
-
-        var updatedAuthor = request.Adapt<AuthorDto>();
         
-        await _unitOfWork.AuthorRepository.Update(updatedAuthor.Adapt<AuthorEntity>(), cancellationToken);
+        await _unitOfWork.AuthorRepository.Update(request.Adapt<AuthorEntity>(), cancellationToken);
         await _unitOfWork.SaveChangesAsync();
         
         cancellationToken.ThrowIfCancellationRequested();
-        return updatedAuthor;
+        return request.Adapt<AuthorDto>();
     }
 }
