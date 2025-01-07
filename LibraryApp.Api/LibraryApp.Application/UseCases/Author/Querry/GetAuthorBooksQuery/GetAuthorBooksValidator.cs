@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
-using LibraryApp.Application.Dto;
-using LibraryApp.Application.Validators;
 
-namespace LibraryApp.Application.UseCases.Author.Command.DeleteAuthorCommand;
+namespace LibraryApp.Application.UseCases.Author.Querry.GetBooksByAuthorQuery;
 
-public class DeleteAuthorValidator : AbstractValidator<DeleteAuthorCommand>
+public class GetAuthorBooksValidator : AbstractValidator<GetAuthorBooksQuery>
 {
-    public DeleteAuthorValidator()
+    public GetAuthorBooksValidator()
     {
         RuleFor(x => x)
             .NotNull()

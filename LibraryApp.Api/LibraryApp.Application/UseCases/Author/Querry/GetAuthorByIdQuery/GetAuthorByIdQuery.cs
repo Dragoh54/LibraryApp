@@ -4,8 +4,9 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Author.Querry.GetAuthorByIdQuerry;
 
-public record GetAuthorByIdQuery : IdModel, IRequest<AuthorDto>
+public record GetAuthorByIdQuery : IRequest<AuthorDto>
 {
+    public Guid Id { get; set; }
     public GetAuthorByIdQuery() { }
     public GetAuthorByIdQuery(Guid id)
     {

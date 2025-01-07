@@ -4,8 +4,10 @@ using MediatR;
 
 namespace LibraryApp.Application.UseCases.Author.Querry.GetBooksByAuthorQuery;
 
-public record GetAuthorBooksQuery : IdModel, IRequest<IEnumerable<BookDto>>
+public record GetAuthorBooksQuery : IRequest<IEnumerable<BookDto>>
 {
+    public Guid Id { get; set; }
+    
     public GetAuthorBooksQuery()
     {
     }
