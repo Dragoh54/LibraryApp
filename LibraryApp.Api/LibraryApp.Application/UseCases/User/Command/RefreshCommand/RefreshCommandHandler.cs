@@ -19,10 +19,6 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, string>
     public async Task<string> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = request.Token;
-        if (string.IsNullOrEmpty(refreshToken))
-        {
-            throw new UnauthorizedAccessException("Refresh token is missing.");
-        }
         
         var token = await _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(refreshToken), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();

@@ -5,7 +5,6 @@ using LibraryApp.Application.UseCases.User.Command.LoginCommand;
 using LibraryApp.Application.UseCases.User.Command.LogoutCommand;
 using LibraryApp.Application.UseCases.User.Command.RefreshCommand;
 using LibraryApp.Application.UseCases.User.Command.RegisterCommand;
-using LibraryApp.Application.User;
 using LibraryApp.DataAccess.Jwt;
 using LibraryApp.DomainModel.Enums;
 using MediatR;

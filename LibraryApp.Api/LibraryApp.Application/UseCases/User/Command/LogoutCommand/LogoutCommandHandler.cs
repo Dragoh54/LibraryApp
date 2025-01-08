@@ -19,11 +19,6 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, bool>
     {
         var token = request.Token;
 
-        if (token is null)
-        {
-            throw new UnauthorizedAccessException("Incorrect refresh token");
-        }
-
         var refreshToken = _unitOfWork.RefreshTokenRepository.Get(Guid.Parse(token), cancellationToken).Result;
         cancellationToken.ThrowIfCancellationRequested();
 

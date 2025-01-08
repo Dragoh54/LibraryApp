@@ -1,11 +1,14 @@
-﻿using LibraryApp.Application.User;
-using LibraryApp.DataAccess.Dto;
+﻿using LibraryApp.DataAccess.Dto;
 using MediatR;
 
 namespace LibraryApp.Application.UseCases.User.Command.RegisterCommand;
 
-public record RegisterCommand : RegisterLoginUserDto, IRequest<UserDto>
+public record RegisterCommand : IRequest<UserDto>
 {
+    public string Nickname { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    
     public RegisterCommand()
     {
     }
